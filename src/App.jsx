@@ -1,10 +1,25 @@
+import { useState } from "react";
+import NavBar from "../components/NavBar";
+import SideBar from "../components/sideBar";
+import Board from "../components/Board";
+import './App.css'
 
 const App = () => {
-  return (
-    <div>
-      Hello
-    </div>
-  )
-}
+  const [darkMode, setDarkMode] = useState(false);
+  const [sidebarVisible, setSidebarVisible] = useState(true);
 
-export default App
+  return (
+    <main>
+      <NavBar sidebarVisible={sidebarVisible} />
+      <SideBar
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+        sidebarVisible={sidebarVisible}
+        setSidebarVisible={setSidebarVisible}
+      />
+        <Board />
+    </main>
+  );
+};
+
+export default App;
