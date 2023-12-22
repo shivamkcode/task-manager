@@ -1,14 +1,13 @@
 
 // eslint-disable-next-line react/prop-types
-const Button = ({ onClick, children, color = '#635FC7', disabled = false }) => {
+const Button = ({ onClick, children, textColor = 'white', color = '#635FC7', disabled = false }) => {
   const style = {
-    backgroundColor: color,
-    color: 'white',
+    backgroundColor: disabled ? 'rgba(99, 95, 199, 0.10)' : color,
+    color: disabled ? '#635FC7' : textColor,
     padding: '10px 20px',
     border: 'none',
     borderRadius: '25px',
     cursor: disabled ? 'not-allowed' : 'pointer',
-    opacity: disabled ? 0.5 : 1,
     transition: 'all 0.3s ease',
   };
 
@@ -21,7 +20,7 @@ const Button = ({ onClick, children, color = '#635FC7', disabled = false }) => {
   };
 
   const handleMouseEnter = (e) => {
-    e.target.style.transform = 'scale(1.1)';
+    e.target.style.transform = 'scale(1.03)';
   };
 
   const handleMouseLeave = (e) => {

@@ -1,10 +1,6 @@
 
 // eslint-disable-next-line react/prop-types
-const Card = ({ children, isOpen, showShadow }) => {
-    
-    if (!isOpen){
-        return null
-    }
+const Card = ({ children, showShadow }) => {
   return (
     <>
         {showShadow && (
@@ -17,7 +13,7 @@ const Card = ({ children, isOpen, showShadow }) => {
                 backgroundColor: 'rgba(0,0,0,0.5)',
                 zIndex: '999',
             }} />
-        )}
+            )}
         <div className="card" style={{
             position: 'fixed',
             top: '50%',
@@ -26,6 +22,7 @@ const Card = ({ children, isOpen, showShadow }) => {
             transform: 'translate(-50%, -50%)',
             backgroundColor: '#fff',
             padding: '20px',
+            borderRadius: '6px',
             zIndex: '1000',
         }}>
             {children}

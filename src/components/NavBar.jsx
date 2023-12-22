@@ -6,9 +6,18 @@ import Cross from "../assets/icon-cross.svg";
 import Input from "./Input";
 import Card from "./Card";
 import Button from "./Button";
+import BoardForm from "./BoardForm";
+import DeleteConfirm from "./DeleteConfirm";
 
-const NavBar = ({ isOpen, sidebarVisible }) => {
+const NavBar = ({
+  sidebarVisible,
+  boardName,
+  setBoardName,
+}) => {
   const [showTaskForm, setShowTaskForm] = useState(false);
+  const [showEditBoard, setShowEditBoard] = useState(false);
+  const [editBoardForm, setEditBoardForm] = useState(false);
+  const [deleteBoardForm, setDeleteBoardForm] = useState(false);
   const [subTasks, setSubTasks] = useState(["", ""]);
   const [newTask, setNewTask] = useState({
     title: "",
@@ -24,7 +33,7 @@ const NavBar = ({ isOpen, sidebarVisible }) => {
       },
       body: JSON.stringify({ title, description, boardId }),
     });
-  
+
     if (response.ok) {
       const task = await response.json();
       console.log("Task created:", task);
@@ -41,7 +50,7 @@ const NavBar = ({ isOpen, sidebarVisible }) => {
       },
       body: JSON.stringify({ title, taskId }),
     });
-  
+
     if (response.ok) {
       const subtask = await response.json();
       console.log("Subtask created:", subtask);
@@ -53,7 +62,7 @@ const NavBar = ({ isOpen, sidebarVisible }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    addNewTask(newTask.title, newTask.description, newTask.status)
+    addNewTask(newTask.title, newTask.description, newTask.status);
     addNewSubtask(subTasks.title);
     console.log(newTask);
     console.log(subTasks);
@@ -71,12 +80,14 @@ const NavBar = ({ isOpen, sidebarVisible }) => {
     <nav className="nav">
       {!sidebarVisible && <img src={Logo} alt="logo" />}
       <h2>Board Name</h2>
-      <Button disabled={showTaskForm} onClick={() => setShowTaskForm(true)}>+Add New task</Button>
+      <Button disabled={showTaskForm} onClick={() => setShowTaskForm(true)}>
+        +Add New task
+      </Button>
       {showTaskForm && (
-        <Card showShadow={true} isOpen={isOpen}>
+        <Card showShadow={true} >
           <div className="card-header">
-          <h3>Add New Task</h3>
-          <img onClick={() => setShowTaskForm(false)} src={Cross} alt="" />
+            <h3>Add New Task</h3>
+            <img onClick={() => setShowTaskForm(false)} src={Cross} alt="" />
           </div>
           <form action="submit">
             <label>
@@ -88,7 +99,7 @@ const NavBar = ({ isOpen, sidebarVisible }) => {
                 onChange={(e) =>
                   setNewTask({ ...newTask, title: e.target.value })
                 }
-                required = {true}
+                required={true}
               />
             </label>
             <label htmlFor="Description">
@@ -127,7 +138,11 @@ recharge the batteries a little."
                 </div>
               ))}
             </label>
-            <Button onClick={addSubTask}>
+            <Button
+              textColor="#635FC7"
+              color={"rgba(99, 95, 199, 0.10)"}
+              onClick={addSubTask}
+            >
               +Add New Subtask
             </Button>
             <label htmlFor="Status">
@@ -146,15 +161,43 @@ recharge the batteries a little."
                 <option value="completed">Completed</option>
               </select>
             </label>
-            <Button disabled={!newTask.title || !newTask.description} onClick={handleSubmit}>Create Task</Button>
+            <Button
+              disabled={!newTask.title || !newTask.description}
+              onClick={handleSubmit}
+            >
+              Create Task
+            </Button>
           </form>
         </Card>
       )}
-      <img src={dots} alt="dots" />
-      <div style={{ display: "none" }}>
-        <span>Edit Board</span>
-        <span style={{ color: "red" }}>Delete Board</span>
-      </div>
+      <img
+        onClick={() => setShowEditBoard(!showEditBoard)}
+        src={dots}
+        alt="dots"
+      />
+      {showEditBoard && (
+        <div className="edit-option">
+          <span onClick={() => setEditBoardForm(true)}>Edit Board</span>
+          <span
+            onClick={() => setDeleteBoardForm(true)}
+            style={{ color: "red" }}
+          >
+            Delete Board
+          </span>
+        </div>
+      )}
+      {editBoardForm && (
+        <BoardForm
+          value={boardName}
+          formHeading={"Edit Board"}
+          boardName={boardName}
+          setBoardName={setBoardName}
+          showForm={setEditBoardForm}
+        />
+      )}
+      {deleteBoardForm && (
+        <DeleteConfirm text='board' name={boardName} showForm={setDeleteBoardForm} />
+      )}
     </nav>
   );
 };
