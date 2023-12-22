@@ -1,23 +1,30 @@
 import { useState } from "react";
-import NavBar from "../components/NavBar";
-import SideBar from "../components/sideBar";
-import Board from "../components/Board";
-import './App.css'
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import "./App.css";
+
+import LoginPage from "./pages/login";
+import SignupPage from "./pages/signUp";
+import Dashboard from "./pages/dashboard";
 
 const App = () => {
-  const [darkMode, setDarkMode] = useState(false);
-  const [sidebarVisible, setSidebarVisible] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <main>
-      <NavBar sidebarVisible={sidebarVisible} />
-      <SideBar
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
-        sidebarVisible={sidebarVisible}
-        setSidebarVisible={setSidebarVisible}
-      />
-        <Board />
+      <Router>
+        <Routes>
+          <Route setIsOpen={setIsOpen} isOpen={isOpen} path="/" element={<Dashboard />} />
+          <Route
+            path="/login"
+            element={
+              <LoginPage
+                isOpen={isOpen}
+              />
+            }
+          />
+          <Route path="/signup" element={<SignupPage isOpen={isOpen} />} />
+        </Routes>
+      </Router>
     </main>
   );
 };

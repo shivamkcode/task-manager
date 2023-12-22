@@ -2,24 +2,57 @@
 import { useState } from "react";
 import "./css/sideBar.css";
 
-import logoLight from "../src/assets/logo-light.svg";
-import logoDark from "../src/assets/logo-dark.svg";
-import BoardIcon from "../src/assets/icon-board.svg";
-import DarkThemeIcon from "../src/assets/icon-dark-theme.svg";
-import LightThemeIcon from "../src/assets/icon-light-theme.svg";
-import EyeIcon from "../src/assets/icon-show-sidebar.svg";
-import HideEyeIcon from "../src/assets/icon-hide-sidebar.svg";
-import Cross from "../src/assets/icon-cross.svg";
+import BoardIcon from "../assets/icon-board.svg";
+import DarkThemeIcon from "../assets/icon-dark-theme.svg";
+import LightThemeIcon from "../assets/icon-light-theme.svg";
+import EyeIcon from "../assets/icon-show-sidebar.svg";
+import HideEyeIcon from "../assets/icon-hide-sidebar.svg";
+import Cross from "../assets/icon-cross.svg";
+import Card from "./Card";
+import Button from "./Button";
 
 const SideBar = ({
   darkMode,
   setDarkMode,
   sidebarVisible,
   setSidebarVisible,
+  isOpen,
 }) => {
   const [boardName, setBoardName] = useState("");
   const [addBoard, setAddBoard] = useState(false);
   const [boardColumns, setBoardColumns] = useState(["Todo", "Doing", "Done"]);
+
+  const addNewBoard = async (name, userId, columns) => {
+    const response = await fetch("http://localhost:3000/boards", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, userId, columns }),
+    });
+
+    if (response.ok) {
+      const board = await response.json();
+      console.log("Board created:", board);
+    } else {
+      console.log("Error creating board:", response.status);
+    }
+  };
+
+  // const getAllBoards = async () => {
+  //   const response = await fetch("http://localhost:3000/boards");
+
+  //   if (response.ok) {
+  //     const boards = await response.json();
+  //     console.log("Boards:", boards);
+  //   } else {
+  //     console.log("Error getting boards:", response.status);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   getAllBoards();
+  // }, []);
 
   const addNewColumn = () => {
     setBoardColumns([...boardColumns, ""]);
@@ -32,6 +65,7 @@ const SideBar = ({
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    addNewBoard(boardName, "userId", boardColumns);
     console.log(boardName);
     console.log(boardColumns);
   };
@@ -43,16 +77,14 @@ const SideBar = ({
   };
 
   return (
-    <div>
+    <div className="aside">
       {sidebarVisible && (
         <aside>
-          <img
-            className="app-logo"
-            src={darkMode ? logoLight : logoDark}
-            alt="logo"
-          />
-          {/* <h1>App Name</h1> */}
-          <div>
+          <div className="logo-container">
+            <div className="logo" />
+            <h1>App Name</h1>
+          </div>
+          <div className="board-list">
             <h6>ALL BOARDS {/*boardList.length*/}</h6>
             {/* {BoardList.length > 0 &&
         BoardList.map((board) => {
@@ -67,7 +99,7 @@ const SideBar = ({
             </div>
           </div>
           {addBoard && (
-            <>
+            <Card isOpen={!isOpen} showShadow={true}>
               <h3>Add New Board</h3>
               <img onClick={() => setAddBoard(false)} src={Cross} alt="X" />
               <form action="submit">
@@ -104,29 +136,31 @@ const SideBar = ({
                     </div>
                   ))}
                 </label>
-                <button type="button" onClick={addNewColumn}>
+                <Button color="gray" onClick={addNewColumn}>
                   +Add New Column
-                </button>
-                <button
-                  type="button"
+                </Button>
+                <Button
+                  disabled={!boardName}
                   onClick={(e) => {
                     handleSubmit(e);
                     setAddBoard(false);
                   }}
                 >
                   Create New Board
-                </button>
+                </Button>
               </form>
-            </>
+            </Card>
           )}
           <div className="modeSelect">
-            <img src={LightThemeIcon} alt="theme" />
-            <label className="switch">
-              <input type="checkbox" onClick={() => setDarkMode(!darkMode)} />
-              <span className="slider round"></span>
-            </label>
+            <div className="mode-change">
+              <img src={LightThemeIcon} alt="theme" />
+              <label className="switch">
+                <input type="checkbox" onClick={() => setDarkMode(!darkMode)} />
+                <span className="slider round"></span>
+              </label>
             <img src={DarkThemeIcon} alt="moon" />
-            <div onClick={() => setSidebarVisible(!sidebarVisible)}>
+            </div>
+            <div className="hide-sidebar" onClick={() => setSidebarVisible(!sidebarVisible)}>
               <img src={HideEyeIcon} alt="eye" />
               <span>Hide SideBar</span>
             </div>

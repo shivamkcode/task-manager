@@ -1,9 +1,47 @@
+
 aside{
-  width: 300px;
-  height: 100vh;
-  border: 2px solid red;
+  border-right: 3px dotted #F4F7FD;
   padding-left: 34px;
   padding-top: 34px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.logo-container{
+  display: flex;
+  align-items: center;
+}
+.logo{
+  background-image: url(../../assets/logo-dark.svg);
+  height: 26px;
+  width: 26px;
+  margin-right: 10px;
+}
+
+.board-list{
+  margin-top: 20px;
+  margin-bottom: auto;
+}
+
+.modeSelect{
+  margin-bottom: 40px;
+}
+
+.mode-change, .hide-sidebar{
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.mode-change{
+  background-color: #F4F7FD;
+  height: 50px;
+  width: 250px;
+  padding: 10px;
+  justify-content: center;
 }
 
 .board-name{
@@ -24,17 +62,6 @@ aside{
   color: white;
   align-items: center;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 .switch {
     position: relative;
@@ -72,7 +99,7 @@ aside{
   }
   
   input:checked + .slider {
-    background-color: #2196F3;
+    background-color: #635FC7;
   }
   
   input:checked + .slider:before {

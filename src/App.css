@@ -6,3 +6,74 @@ body{
     margin: 0;
     padding: 0;
 }
+
+.container{
+    display: grid;
+    grid-template-rows: 100px 1fr;
+    grid-template-columns: 300px 1fr;
+}
+
+.nav{
+    grid-area: 1 / 2 ;
+    display: flex;
+    padding: 25px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav > button{
+    margin-right: 24px;
+    margin-left: auto;
+}
+
+.nav img{
+    height: 20px;
+}
+
+aside{
+    grid-area: 1;
+}
+.board{
+    grid-area: 2 / 2 ;
+    background: #F4F7FD;
+    display: grid;
+    height: calc(100vh - 100px);
+    /* width: 100%;
+    height: 100%; */
+}
+.empty-board{
+    justify-self: center;
+    text-align: center;
+    padding-top: 20%;
+}
+
+.card-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+textarea{
+    width: 100%;
+    resize: none;
+    margin-bottom: 24px;
+}
+
+textarea::-webkit-scrollbar {
+    display: none;
+}
+
+.subtask{
+    display: flex;
+    align-items: center;
+}
+.subtask img{
+    margin-left: 10px;
+    height: 14px;
+}
+.card input{
+    margin-bottom: 24px;
+}
+.subtask input{
+    margin-bottom: 12px;
+}
