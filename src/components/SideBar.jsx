@@ -17,22 +17,10 @@ const SideBar = ({
   setAddBoard,
   addBoard,
   setBoardName,
+  boards,
+  chosenBoardId,
+  setChosenBoardId,
 }) => {
-  // const getAllBoards = async () => {
-  //   const response = await fetch("http://localhost:3000/boards");
-
-  //   if (response.ok) {
-  //     const boards = await response.json();
-  //     console.log("Boards:", boards);
-  //   } else {
-  //     console.log("Error getting boards:", response.status);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getAllBoards();
-  // }, []);
-
   return (
     <div className="aside">
       {sidebarVisible && (
@@ -42,17 +30,36 @@ const SideBar = ({
             <h1>App Name</h1>
           </div>
           <div className="board-list">
-            <h6>ALL BOARDS {/*boardList.length*/}</h6>
-            {/* {BoardList.length > 0 &&
-        BoardList.map((board) => {
-          <div className="board-name">
-            <img src={BoardIcon} alt="board" />
-            <h5>{board.name}</h5>
-          </div>;
-        })} */}
-            <div className="board-name">
-              <img src={BoardIcon} alt="board" />
-              <h5 onClick={() => setAddBoard(true)}>+Create New Board</h5>
+            <h6>ALL BOARDS ({boards.length})</h6>
+            {boards.length > 0 &&
+              boards.map((board, i) => (
+                <div
+                  key={i}
+                  onClick={() => {
+                    setChosenBoardId(board.id);
+                  }}
+                  className={`board-name ${
+                    chosenBoardId === board.id ? "selected" : ""
+                  }`}
+                >
+                  <img src={BoardIcon} alt="board" />
+                  <h5>{board.name}</h5>
+                </div>
+              ))}
+            <div
+              onClick={() => setAddBoard(true)}
+              style={{ color: "#635FC7" }}
+              className="board-name"
+            >
+              <img
+                style={{
+                  filter:
+                    "invert(48%) sepia(79%) saturate(2476%) hue-rotate(220deg) brightness(80%) contrast(90%)",
+                }}
+                src={BoardIcon}
+                alt="board"
+              />
+              <h5>+Create New Board</h5>
             </div>
           </div>
           {addBoard && (

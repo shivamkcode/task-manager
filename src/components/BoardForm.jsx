@@ -6,16 +6,16 @@ import { useState } from "react";
 
 // eslint-disable-next-line react/prop-types
 const BoardForm = ({ formHeading, showForm, setBoardName, boardName }) => {
+  const [boardColumns, setBoardColumns] = useState(["TODO", "DOING", "DONE"]);
 
-  const [boardColumns, setBoardColumns] = useState(["Todo", "Doing", "Done"]);
-
-  const addNewBoard = async (name, userId, columns) => {
+  const addNewBoard = async (name,  token, columns) => {
     const response = await fetch("http://localhost:3000/boards", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `${token}`
       },
-      body: JSON.stringify({ name, userId, columns }),
+      body: JSON.stringify({ name, columns }),
     });
 
     if (response.ok) {
@@ -36,10 +36,8 @@ const BoardForm = ({ formHeading, showForm, setBoardName, boardName }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    addNewBoard(boardName, "userId", boardColumns);
-    console.log(boardName);
-    console.log(boardColumns);
+    const token = localStorage.getItem('token')
+    addNewBoard(boardName,token, boardColumns);
   };
 
   const handleBoardColumnChange = (index) => (event) => {

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import dots from "../assets/icon-vertical-ellipsis.svg";
+import Dots from "../assets/icon-vertical-ellipsis.svg";
 import Logo from "../assets/logo-light.svg";
 import Cross from "../assets/icon-cross.svg";
 import Input from "./Input";
@@ -9,11 +9,7 @@ import Button from "./Button";
 import BoardForm from "./BoardForm";
 import DeleteConfirm from "./DeleteConfirm";
 
-const NavBar = ({
-  sidebarVisible,
-  boardName,
-  setBoardName,
-}) => {
+const NavBar = ({ sidebarVisible, boardName, setBoardName, boardId }) => {
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [showEditBoard, setShowEditBoard] = useState(false);
   const [editBoardForm, setEditBoardForm] = useState(false);
@@ -22,16 +18,16 @@ const NavBar = ({
   const [newTask, setNewTask] = useState({
     title: "",
     description: "",
-    status: "",
+    status: "TODO",
   });
 
-  const addNewTask = async (title, description, boardId) => {
+  const addNewTask = async (title, description, status, boardId, subTasks) => {
     const response = await fetch("http://localhost:3000/tasks", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ title, description, boardId }),
+      body: JSON.stringify({ title, description, status, boardId, subTasks }),
     });
 
     if (response.ok) {
@@ -42,35 +38,28 @@ const NavBar = ({
     }
   };
 
-  const addNewSubtask = async (title, taskId) => {
-    const response = await fetch("http://localhost:3000/subtasks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title, taskId }),
-    });
-
-    if (response.ok) {
-      const subtask = await response.json();
-      console.log("Subtask created:", subtask);
-    } else {
-      console.log("Error creating subtask:", response.status);
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    addNewTask(newTask.title, newTask.description, newTask.status);
-    addNewSubtask(subTasks.title);
-    console.log(newTask);
-    console.log(subTasks);
+    addNewTask(
+      newTask.title,
+      newTask.description,
+      newTask.status,
+      boardId,
+      subTasks
+    );
+    setShowTaskForm(false);
+    setNewTask({
+      title: "",
+      description: "",
+      status: "TODO",
+    });
+    setSubTasks(['',''])
   };
 
   const addSubTask = () => {
-    setSubTasks([...subTasks, ""]);
-  };
+    setSubTasks([...subTasks, ""])
+  }
 
   const removeSubTask = (index) => {
     setSubTasks([...subTasks.filter((subTask, i) => i !== index)]);
@@ -84,7 +73,7 @@ const NavBar = ({
         +Add New task
       </Button>
       {showTaskForm && (
-        <Card showShadow={true} >
+        <Card showShadow={true}>
           <div className="card-header">
             <h3>Add New Task</h3>
             <img onClick={() => setShowTaskForm(false)} src={Cross} alt="" />
@@ -156,13 +145,15 @@ recharge the batteries a little."
                 }
                 required
               >
-                <option value="todo">Todo</option>
-                <option value="doing">Doing</option>
-                <option value="completed">Completed</option>
+                <option value="TODO">Todo</option>
+                <option value="DOING">Doing</option>
+                <option value="DONE">Done</option>
               </select>
             </label>
             <Button
-              disabled={!newTask.title || !newTask.description}
+              disabled={
+                !newTask.title || !newTask.description || subTasks.includes("")
+              }
               onClick={handleSubmit}
             >
               Create Task
@@ -172,7 +163,7 @@ recharge the batteries a little."
       )}
       <img
         onClick={() => setShowEditBoard(!showEditBoard)}
-        src={dots}
+        src={Dots}
         alt="dots"
       />
       {showEditBoard && (
@@ -196,7 +187,11 @@ recharge the batteries a little."
         />
       )}
       {deleteBoardForm && (
-        <DeleteConfirm text='board' name={boardName} showForm={setDeleteBoardForm} />
+        <DeleteConfirm
+          text="board"
+          name={boardName}
+          showForm={setDeleteBoardForm}
+        />
       )}
     </nav>
   );

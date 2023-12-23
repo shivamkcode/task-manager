@@ -6,6 +6,7 @@ import SignupPage from "./pages/signUp";
 import Dashboard from "./pages/dashboard";
 
 const App = () => {
+
   return (
     <main>
       <Router>

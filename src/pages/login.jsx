@@ -50,7 +50,7 @@ const LoginPage = ({ isOpen }) => {
           Login
         </Button>
         <p>{message}</p>
-        <button onClick={() => navigate("/signup")}>Create New Account</button>
+        <Button onClick={() => navigate("/signup")}>Create New Account</Button>
       </div>
     </Card>
   );
