@@ -7,7 +7,7 @@ const DeleteConfirm = ({ text, name, showForm }) => {
   const deleteTask = () => {};
   return (
     <Card showShadow={true}>
-      <h3 style={{ color: "#EA5555" }}>Delete this {text}?</h3>
+      <h3 style={{ color: "#EA5555", fontSize: '20px', margin: '15px auto' }}>Delete this {text}?</h3>
       {text === "board" && (
         <p>
           Are you sure you want to delete the <b>{name}</b> board? This action

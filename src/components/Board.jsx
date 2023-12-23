@@ -5,10 +5,15 @@ import { useState } from "react";
 import Card from "./Card";
 import Dots from "../assets/icon-vertical-ellipsis.svg";
 import Checkbox from "./Checkbox";
+import TaskForm from "./TaskForm";
+import DeleteConfirm from "./DeleteConfirm";
 
 // eslint-disable-next-line react/prop-types
-const Board = ({ selectedColumns, tasks, setTasks }) => {
+const Board = ({ selectedColumns, tasks, setTasks, boardId }) => {
   const [taskDetails, setTaskDetails] = useState(false);
+  const [showTaskEditOption, setShowTaskEditOption] = useState(false);
+  const [showTaskEditForm, setShowTaskEditForm] = useState(false);
+  const [showTaskDeleteForm, setShowTaskDeleteForm] = useState(false);
   const handleNewColumn = () => {};
 
   const handleDragEnd = async (result) => {
@@ -56,6 +61,9 @@ const Board = ({ selectedColumns, tasks, setTasks }) => {
       //     }
     }
   };
+
+  const handleStatusChange = () => {};
+
   console.log(tasks);
   return (
     <div className="board">
@@ -122,28 +130,80 @@ const Board = ({ selectedColumns, tasks, setTasks }) => {
                                   <div className="task-details">
                                     <div className="card-header">
                                       <h3>{task.title}</h3>
-                                      <img src={Dots} alt="dots" />
+                                      <img
+                                        onClick={() =>
+                                          setShowTaskEditOption(
+                                            !showTaskEditOption
+                                          )
+                                        }
+                                        src={Dots}
+                                        alt="dots"
+                                      />
                                     </div>
+                                    {showTaskEditOption && (
+                                      <div className="edit-option">
+                                        <span
+                                          onClick={() =>
+                                            setShowTaskEditForm(true)
+                                          }
+                                        >
+                                          Edit Task
+                                        </span>
+                                        {showTaskEditForm && (
+                                          <TaskForm
+                                            heading={"Edit"}
+                                            showForm={setShowTaskEditForm}
+                                            boardId={boardId}
+                                          />
+                                        )}
+                                        <span
+                                          onClick={() =>
+                                            setShowTaskDeleteForm(true)
+                                          }
+                                          style={{ color: "red" }}
+                                        >
+                                          Delete Task
+                                        </span>
+                                        {showTaskDeleteForm && (
+                                          <DeleteConfirm
+                                            text="task"
+                                            name={task.title}
+                                            showForm={setShowTaskDeleteForm}
+                                          />
+                                        )}
+                                        <span
+                                          onClick={() => {
+                                            setTaskDetails(false);
+                                            setShowTaskEditOption(
+                                              !showTaskEditOption
+                                            );
+                                          }}
+                                        >
+                                          Close
+                                        </span>
+                                      </div>
+                                    )}
                                     <p>{task.description}</p>
                                     <h6>
                                       Subtasks(0 of {task.subtasks.length})
                                     </h6>
                                     {task.subtasks.map((subtask, i) => (
-                                        <Checkbox key={i}>
-                                          {subtask.title}
-                                        </Checkbox>
+                                      <Checkbox key={i}>
+                                        {subtask.title}
+                                      </Checkbox>
                                     ))}
                                     <h6>Current Status</h6>
                                     <select
                                       name="Status"
                                       value={task.status}
+                                      onChange={handleStatusChange}
                                       required
                                     >
                                       <option value="TODO">Todo</option>
                                       <option value="DOING">Doing</option>
                                       <option value="DONE">Done</option>
                                     </select>
-                                  <Button >Submit Changes</Button>
+                                    <Button>Submit Changes</Button>
                                   </div>
                                 </Card>
                               )}

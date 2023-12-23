@@ -88,6 +88,7 @@ const Dashboard = () => {
         tasks={tasks}
         chosenBoardId={chosenBoardId}
         setTasks={setTasks}
+        boardId={chosenBoardId}
       />
     </main>
   );
