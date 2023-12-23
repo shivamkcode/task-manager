@@ -14,6 +14,7 @@ const Board = ({ selectedColumns, tasks, setTasks, boardId }) => {
   const [showTaskEditOption, setShowTaskEditOption] = useState(false);
   const [showTaskEditForm, setShowTaskEditForm] = useState(false);
   const [showTaskDeleteForm, setShowTaskDeleteForm] = useState(false);
+  const [selectedTask, setSelectedTask] = useState();
   const handleNewColumn = () => {};
 
   const handleDragEnd = async (result) => {
@@ -114,7 +115,10 @@ const Board = ({ selectedColumns, tasks, setTasks, boardId }) => {
                           {(provided) => (
                             <>
                               <div
-                                onClick={() => setTaskDetails(true)}
+                                onClick={() => {
+                                  setTaskDetails(true);
+                                  setSelectedTask(task.id);
+                                }}
                                 className="task-box"
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
@@ -125,88 +129,90 @@ const Board = ({ selectedColumns, tasks, setTasks, boardId }) => {
                                   0 of {task.subtasks.length} subtasks
                                 </span>
                               </div>
-                              {taskDetails && (
-                                <Card showShadow={true}>
-                                  <div className="task-details">
-                                    <div className="card-header">
-                                      <h3>{task.title}</h3>
-                                      <img
-                                        onClick={() =>
-                                          setShowTaskEditOption(
-                                            !showTaskEditOption
-                                          )
-                                        }
-                                        src={Dots}
-                                        alt="dots"
-                                      />
-                                    </div>
-                                    {showTaskEditOption && (
-                                      <div className="edit-option">
-                                        <span
-                                          onClick={() =>
-                                            setShowTaskEditForm(true)
-                                          }
-                                        >
-                                          Edit Task
-                                        </span>
-                                        {showTaskEditForm && (
-                                          <TaskForm
-                                            heading={"Edit"}
-                                            showForm={setShowTaskEditForm}
-                                            boardId={boardId}
+                              {taskDetails &&
+                                selectedTask ===
+                                  task.id(
+                                    <Card showShadow={true}>
+                                      <div className="task-details">
+                                        <div className="card-header">
+                                          <h3>{task.title}</h3>
+                                          <img
+                                            onClick={() =>
+                                              setShowTaskEditOption(
+                                                !showTaskEditOption
+                                              )
+                                            }
+                                            src={Dots}
+                                            alt="dots"
                                           />
+                                        </div>
+                                        {showTaskEditOption && (
+                                          <div className="edit-option">
+                                            <span
+                                              onClick={() =>
+                                                setShowTaskEditForm(true)
+                                              }
+                                            >
+                                              Edit Task
+                                            </span>
+                                            {showTaskEditForm && (
+                                              <TaskForm
+                                                heading={"Edit"}
+                                                showForm={setShowTaskEditForm}
+                                                boardId={boardId}
+                                              />
+                                            )}
+                                            <span
+                                              onClick={() =>
+                                                setShowTaskDeleteForm(true)
+                                              }
+                                              style={{ color: "red" }}
+                                            >
+                                              Delete Task
+                                            </span>
+                                            {showTaskDeleteForm && (
+                                              <DeleteConfirm
+                                                text="task"
+                                                name={task.title}
+                                                showForm={setShowTaskDeleteForm}
+                                              />
+                                            )}
+                                            <span
+                                              onClick={() => {
+                                                setTaskDetails(false);
+                                                setShowTaskEditOption(
+                                                  !showTaskEditOption
+                                                );
+                                              }}
+                                            >
+                                              Close
+                                            </span>
+                                          </div>
                                         )}
-                                        <span
-                                          onClick={() =>
-                                            setShowTaskDeleteForm(true)
-                                          }
-                                          style={{ color: "red" }}
+                                        <p>{task.description}</p>
+                                        <h6>
+                                          Subtasks(0 of {task.subtasks.length})
+                                        </h6>
+                                        {task.subtasks.map((subtask, i) => (
+                                          <Checkbox key={i}>
+                                            {subtask.title}
+                                          </Checkbox>
+                                        ))}
+                                        <h6>Current Status</h6>
+                                        <select
+                                          name="Status"
+                                          value={task.status}
+                                          onChange={handleStatusChange}
+                                          required
                                         >
-                                          Delete Task
-                                        </span>
-                                        {showTaskDeleteForm && (
-                                          <DeleteConfirm
-                                            text="task"
-                                            name={task.title}
-                                            showForm={setShowTaskDeleteForm}
-                                          />
-                                        )}
-                                        <span
-                                          onClick={() => {
-                                            setTaskDetails(false);
-                                            setShowTaskEditOption(
-                                              !showTaskEditOption
-                                            );
-                                          }}
-                                        >
-                                          Close
-                                        </span>
+                                          <option value="TODO">Todo</option>
+                                          <option value="DOING">Doing</option>
+                                          <option value="DONE">Done</option>
+                                        </select>
+                                        <Button>Submit Changes</Button>
                                       </div>
-                                    )}
-                                    <p>{task.description}</p>
-                                    <h6>
-                                      Subtasks(0 of {task.subtasks.length})
-                                    </h6>
-                                    {task.subtasks.map((subtask, i) => (
-                                      <Checkbox key={i}>
-                                        {subtask.title}
-                                      </Checkbox>
-                                    ))}
-                                    <h6>Current Status</h6>
-                                    <select
-                                      name="Status"
-                                      value={task.status}
-                                      onChange={handleStatusChange}
-                                      required
-                                    >
-                                      <option value="TODO">Todo</option>
-                                      <option value="DOING">Doing</option>
-                                      <option value="DONE">Done</option>
-                                    </select>
-                                    <Button>Submit Changes</Button>
-                                  </div>
-                                </Card>
-                              )}
+                                    </Card>
+                                  )}
                             </>
                           )}
                         </Draggable>
