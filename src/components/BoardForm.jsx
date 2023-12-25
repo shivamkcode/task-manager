@@ -1,19 +1,32 @@
+/* eslint-disable react/prop-types */
 import Card from "./Card";
 import Cross from "../assets/icon-cross.svg";
 import Button from "./Button";
 import Input from "./Input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // eslint-disable-next-line react/prop-types
-const BoardForm = ({ formHeading, showForm, setBoardName, boardName }) => {
-  const [boardColumns, setBoardColumns] = useState(["TODO", "DOING", "DONE"]);
+const BoardForm = ({ showForm, selectedBoard, mode, getBoards }) => {
+  const [boardName, setBoardName] = useState(mode ? selectedBoard.name : "");
+  const [boardColumns, setBoardColumns] = useState([
+    { status: "TODO" },
+    { status: "DOING" },
+    { status: "DONE" },
+  ]);
 
-  const addNewBoard = async (name,  token, columns) => {
+  useEffect(() => {
+    if (mode === "edit") {
+      setBoardName(selectedBoard.name);
+      setBoardColumns(selectedBoard.columns);
+    }
+  }, [mode, selectedBoard]);
+
+  const addNewBoard = async (name, token, columns) => {
     const response = await fetch("http://localhost:3000/boards", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `${token}`
+        Authorization: `${token}`,
       },
       body: JSON.stringify({ name, columns }),
     });
@@ -26,31 +39,54 @@ const BoardForm = ({ formHeading, showForm, setBoardName, boardName }) => {
     }
   };
 
+  const updateBoard = async ( id, name, token, columns) => {
+    const response = await fetch(`http://localhost:3000/boards/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      },
+      body: JSON.stringify({ name, columns })
+    })
+
+    if (!response.ok) {
+      const message = `An error has occured: ${response.status}`
+      throw new Error(message)
+    }
+
+    const board = await response.json()
+    return board
+  }
+
   const addNewColumn = () => {
-    setBoardColumns([...boardColumns, ""]);
+    setBoardColumns([...boardColumns, { status: "" }]);
   };
 
   const removeColumn = (index) => {
     setBoardColumns(boardColumns.filter((boardColumn, i) => i !== index));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem('token')
-    addNewBoard(boardName,token, boardColumns);
+  const handleSubmit = async () => {
+    const token = localStorage.getItem("token");
+    if (mode === "edit") {
+      await updateBoard( selectedBoard.id, boardName, token, boardColumns )
+      getBoards(token)
+    } else {
+      addNewBoard(boardName, token, boardColumns);
+    }
   };
 
   const handleBoardColumnChange = (index) => (event) => {
     const newBoardColumns = [...boardColumns];
-    newBoardColumns[index] = event.target.value;
+    newBoardColumns[index].status = event.target.value;
     setBoardColumns(newBoardColumns);
   };
 
   return (
     <Card showShadow={true}>
       <div className="card-header">
-        <h3>{formHeading}</h3>
-        <img onClick={() => showForm(false)} src={Cross} alt="X" />
+        <h3>{mode ? "Edit" : "Add New"} board</h3>
+        <img onClick={() => showForm()} src={Cross} alt="X" />
       </div>
       <form action="submit">
         <label htmlFor="name">
@@ -69,7 +105,7 @@ const BoardForm = ({ formHeading, showForm, setBoardName, boardName }) => {
             <div className="subtask" key={index}>
               <Input
                 placeholder="status"
-                value={boardColumns[index]}
+                value={boardColumn.status}
                 onChange={handleBoardColumnChange(index)}
                 required
               />
@@ -86,12 +122,12 @@ const BoardForm = ({ formHeading, showForm, setBoardName, boardName }) => {
         </Button>
         <Button
           disabled={!boardName}
-          onClick={(e) => {
-            handleSubmit(e);
-            showForm(false);
+          onClick={() => {
+            handleSubmit();
+            showForm();
           }}
         >
-          Create New Board
+          {mode ? "Edit" : "Create New"} Board
         </Button>
       </form>
     </Card>

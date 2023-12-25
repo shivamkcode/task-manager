@@ -1,6 +1,6 @@
 
 // eslint-disable-next-line react/prop-types
-const Button = ({ onClick, children, textColor = 'white', color = '#635FC7', disabled = false }) => {
+const Button = ({ onClick, children, textColor = 'white', color = '#635FC7', disabled = false , type="button"}) => {
   const style = {
     backgroundColor: disabled ? 'rgba(99, 95, 199, 0.10)' : color,
     color: disabled ? '#635FC7' : textColor,
@@ -30,12 +30,13 @@ const Button = ({ onClick, children, textColor = 'white', color = '#635FC7', dis
   return (
     <button 
       style={style} 
-      onClick={onClick} 
+      onClick={onClick}
       disabled={disabled}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      type={type}
     >
       {children}
     </button>

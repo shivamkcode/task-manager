@@ -6,20 +6,14 @@ import DarkThemeIcon from "../assets/icon-dark-theme.svg";
 import LightThemeIcon from "../assets/icon-light-theme.svg";
 import EyeIcon from "../assets/icon-show-sidebar.svg";
 import HideEyeIcon from "../assets/icon-hide-sidebar.svg";
-import BoardForm from "./BoardForm";
 
 const SideBar = ({
-  darkMode,
-  setDarkMode,
-  sidebarVisible,
-  setSidebarVisible,
-  boardName,
-  setAddBoard,
-  addBoard,
-  setBoardName,
+  setIsOpen,
   boards,
   chosenBoardId,
   setChosenBoardId,
+  sidebarVisible,
+  setSidebarVisible,
 }) => {
   return (
     <div className="aside">
@@ -47,7 +41,7 @@ const SideBar = ({
                 </div>
               ))}
             <div
-              onClick={() => setAddBoard(true)}
+              onClick={() => setIsOpen({ addBoard: true })}
               style={{ color: "#635FC7" }}
               className="board-name"
             >
@@ -62,26 +56,27 @@ const SideBar = ({
               <h5>+Create New Board</h5>
             </div>
           </div>
-          {addBoard && (
-            <BoardForm
-              formHeading={"Add New Board"}
-              boardName={boardName}
-              setBoardName={setBoardName}
-              showForm={setAddBoard}
-            />
-          )}
+          
           <div className="modeSelect">
             <div className="mode-change">
               <img src={LightThemeIcon} alt="theme" />
               <label className="switch">
-                <input type="checkbox" onClick={() => setDarkMode(!darkMode)} />
+                <input
+                  type="checkbox"
+                  onClick={() =>
+                    setIsOpen((prevState) => ({
+                      ...prevState,
+                      darkMode: !prevState.darkMode,
+                    }))
+                  }
+                />
                 <span className="slider round"></span>
               </label>
               <img src={DarkThemeIcon} alt="moon" />
             </div>
             <div
               className="hide-sidebar"
-              onClick={() => setSidebarVisible(!sidebarVisible)}
+              onClick={() => setSidebarVisible(false)}
             >
               <img src={HideEyeIcon} alt="eye" />
               <span>Hide SideBar</span>
@@ -91,7 +86,7 @@ const SideBar = ({
       )}
       {!sidebarVisible && (
         <div
-          onClick={() => setSidebarVisible(!sidebarVisible)}
+          onClick={() => setSidebarVisible(true)}
           style={{ background: "purple" }}
         >
           <img src={EyeIcon} alt="eye" />

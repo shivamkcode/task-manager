@@ -5,29 +5,31 @@ import Board from "../components/Board";
 
 // eslint-disable-next-line react/prop-types
 const Dashboard = () => {
-  const [darkMode, setDarkMode] = useState(false);
+  const [isOpen, setIsOpen] = useState({
+    darkMode: false,
+    addBoard : false,
+    showTaskForm: false,
+    editBoardForm: false,
+    deleteBoardForm: false,
+    showEditBoard: false,
+  });
   const [sidebarVisible, setSidebarVisible] = useState(true);
-  const [boardName, setBoardName] = useState("");
-  const [addBoard, setAddBoard] = useState(false);
-
+  const [selectedColumns, setSelectedColumns] = useState([]);
   const [boards, setBoards] = useState([""]);
   const [chosenBoardId, setChosenBoardId] = useState(1);
-  const [selectedColumns, setSelectedColumns] = useState([]);
-  const [tasks, setTasks] = useState([]);
-
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     getBoards(token);
-  }, [addBoard]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen.addBoard, chosenBoardId]);
 
   useEffect(() => {
-    setSelectedColumns(boards[chosenBoardId - 1]?.columns || []);
+    setSelectedColumns(boards.find((board) => board.id === chosenBoardId)?.columns || []);
   }, [boards, chosenBoardId]);
-  
 
   const getBoards = async (token) => {
-    const response = await fetch("http://localhost:3000/boards", {
+    const response = await fetch(`http://localhost:3000/boards?boardId=${chosenBoardId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -43,52 +45,32 @@ const Dashboard = () => {
     }
   };
 
-  useEffect(() => {
-    async function fetchTasks() {
-      const response = await fetch(`http://localhost:3000/tasks?boardId=${chosenBoardId}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const tasks = await response.json();
-      setTasks(tasks);
-    }
-    fetchTasks();
-    
-  }, [chosenBoardId]);
-
   return (
     <main className="container">
       <NavBar
-        boardName={boardName}
-        setAddBoard={setAddBoard}
-        addBoard={addBoard}
-        setBoardName={setBoardName}
+        boardName={boards.find((board) => board.id === chosenBoardId)?.name}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
         sidebarVisible={sidebarVisible}
-        boardId={chosenBoardId}
-        selectedColumns={selectedColumns}
       />
       <SideBar
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
-        sidebarVisible={sidebarVisible}
-        setSidebarVisible={setSidebarVisible}
-        boardName={boardName}
-        setAddBoard={setAddBoard}
-        addBoard={addBoard}
-        setBoardName={setBoardName}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
         boards={boards}
-        getBoards={getBoards}
         chosenBoardId={chosenBoardId}
         setChosenBoardId={setChosenBoardId}
+        sidebarVisible={sidebarVisible}
+        setSidebarVisible={setSidebarVisible}
       />
       <Board
-        sidebarVisible={sidebarVisible}
+        boardName={boards.find((board) => board.id === chosenBoardId)?.name}
+        getBoards={getBoards}
         boards={boards}
         selectedColumns={selectedColumns}
-        tasks={tasks}
-        chosenBoardId={chosenBoardId}
-        setTasks={setTasks}
         boardId={chosenBoardId}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        setChosenBoardId={setChosenBoardId}
       />
     </main>
   );

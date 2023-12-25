@@ -2,11 +2,12 @@ import { useState } from 'react';
 import './css/Checkbox.css'; 
 
 // eslint-disable-next-line react/prop-types
-const Checkbox = ({children}) => {
-  const [checked, setChecked] = useState(false);
+const Checkbox = ({children, initialChecked = false, onCheckboxChange}) => {
+  const [checked, setChecked] = useState(initialChecked);
 
-  const handleCheckboxChange = () => {
-    setChecked(!checked);
+  const handleCheckboxChange = (event) => {
+    setChecked(event.target.checked);
+    onCheckboxChange(event.target.checked);
   };
 
   return (

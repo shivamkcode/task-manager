@@ -1,13 +1,58 @@
+/* eslint-disable react/prop-types */
 import Button from "./Button";
 import Card from "./Card";
 
-// eslint-disable-next-line react/prop-types
-const DeleteConfirm = ({ text, name, showForm }) => {
-  const deleteBoard = () => {};
-  const deleteTask = () => {};
+const DeleteConfirm = ({
+  text,
+  name,
+  hideForm,
+  id,
+  getBoards,
+}) => {
+  const deleteBoard = async (id, token) => {
+    const response = await fetch(`http://localhost:3000/boards/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
+    if (response.ok) {
+      console.log("Board and all its tasks are deleted successfully");
+    } else {
+      console.log("Error deleting the board:", response.status);
+    }
+  };
+
+  const deleteTask = async (id, token) => {
+    const response = await fetch(`http://localhost:3000/tasks/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
+    if (response.ok) {
+      console.log("Task deleted successfully");
+    } else {
+      console.log("Error deleting the task:", response.status);
+    }
+  };
+
+  const handleDelete = async () => {
+    const token = localStorage.getItem("token");
+    if (text === "board") {
+      await deleteBoard(id, token);
+      getBoards(token);
+    } else {
+      await deleteTask(id, token);
+      getBoards(token);
+    }
+  };
+
   return (
     <Card showShadow={true}>
-      <h3 style={{ color: "#EA5555", fontSize: '20px', margin: '15px auto' }}>Delete this {text}?</h3>
+      <h3 style={{ color: "#EA5555", fontSize: "20px", margin: "15px auto" }}>
+        Delete this {text}?
+      </h3>
       {text === "board" && (
         <p>
           Are you sure you want to delete the <b>{name}</b> board? This action
@@ -23,14 +68,17 @@ const DeleteConfirm = ({ text, name, showForm }) => {
       <Button
         color="#EA5555"
         textColor="white"
-        onClick={text === "board" ? deleteBoard : deleteTask}
+        onClick={() => {
+          hideForm();
+          handleDelete();
+        }}
       >
         Delete
       </Button>
       <Button
         color="rgba(99, 95, 199, 0.10)"
         textColor="#635FC7"
-        onClick={() => showForm(false)}
+        onClick={() => hideForm()}
       >
         Cancel
       </Button>

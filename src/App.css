@@ -43,7 +43,8 @@ label {
 select,
 textarea,
 .aside button,
-.task-details button {
+.task-details button,
+.board button {
   padding: 8px;
   width: 100%;
   margin-bottom: 20px;
@@ -57,7 +58,7 @@ aside {
   grid-area: 2 / 2;
   background: #f4f7fd;
   height: calc(100vh - 100px);
-  padding: 24px;
+  padding: 24px 0 0 24px;
   overflow-x: auto;
 }
 .board::-webkit-scrollbar {
@@ -67,6 +68,9 @@ aside {
   justify-self: center;
   text-align: center;
   padding-top: 20%;
+}
+.empty-board button {
+  width: auto;
 }
 
 .card-header {
@@ -79,7 +83,7 @@ textarea {
   resize: none;
 }
 
-textarea::-webkit-scrollbar {
+textarea::-webkit-scrollbar, .columns::-webkit-scrollbar {
   display: none;
 }
 
@@ -99,7 +103,6 @@ textarea::-webkit-scrollbar {
 }
 .edit-option {
   width: 192px;
-  /* height: 94px; */
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -118,11 +121,16 @@ textarea::-webkit-scrollbar {
   color: #828fa3;
 }
 .column-container {
+  margin-top: 15px;
   display: flex;
   gap: 24px;
+  position: relative;
 }
 .columns {
-  width: 288px;
+  height: calc(100vh - 140px);
+  min-width: 288px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .columns * {
   margin: 0;
@@ -131,6 +139,8 @@ textarea::-webkit-scrollbar {
   display: flex;
   align-items: center;
   gap: 12px;
+  position: absolute;
+  top: -22px;
 }
 .board h6 {
   font-size: 12px;
@@ -154,21 +164,20 @@ textarea::-webkit-scrollbar {
   font-size: 12px;
 }
 .task-details {
-    padding: 20px;
-    padding-bottom: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+  padding: 20px;
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
-.task-details h3{
-    font-size: 18px;
+.task-details h3 {
+  font-size: 18px;
 }
-.task-details p{
-    color: #828FA3;
-    font-size: 13px;
-    margin-bottom: 20px;
+.task-details p {
+  color: #828fa3;
+  font-size: 13px;
+  margin-bottom: 20px;
 }
-.task-details img{
-    margin-left: 10px;
+.task-details img {
+  margin-left: 10px;
 }
-
