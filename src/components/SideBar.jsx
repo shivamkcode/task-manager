@@ -23,9 +23,9 @@ const SideBar = ({
             <div className="logo" />
             <h1>App Name</h1>
           </div>
+          <h6>ALL BOARDS ({boards?.length})</h6>
           <div className="board-list">
-            <h6>ALL BOARDS ({boards.length})</h6>
-            {boards.length > 0 &&
+            {boards?.length > 0 &&
               boards.map((board, i) => (
                 <div
                   key={i}
@@ -40,23 +40,23 @@ const SideBar = ({
                   <h5>{board.name}</h5>
                 </div>
               ))}
-            <div
-              onClick={() => setIsOpen({ addBoard: true })}
-              style={{ color: "#635FC7" }}
-              className="board-name"
-            >
-              <img
-                style={{
-                  filter:
-                    "invert(48%) sepia(79%) saturate(2476%) hue-rotate(220deg) brightness(80%) contrast(90%)",
-                }}
-                src={BoardIcon}
-                alt="board"
-              />
-              <h5>+Create New Board</h5>
-            </div>
           </div>
-          
+          <div
+            onClick={() => setIsOpen({ addBoard: true })}
+            style={{ color: "#635FC7" }}
+            className="board-name add-board"
+          >
+            <img
+              style={{
+                filter:
+                  "invert(48%) sepia(79%) saturate(2476%) hue-rotate(220deg) brightness(80%) contrast(90%)",
+              }}
+              src={BoardIcon}
+              alt="board"
+            />
+            <h5>+Create New Board</h5>
+          </div>
+
           <div className="modeSelect">
             <div className="mode-change">
               <img src={LightThemeIcon} alt="theme" />
@@ -85,10 +85,7 @@ const SideBar = ({
         </aside>
       )}
       {!sidebarVisible && (
-        <div
-          onClick={() => setSidebarVisible(true)}
-          style={{ background: "purple" }}
-        >
+        <div className="show-sidebar" onClick={() => setSidebarVisible(true)}>
           <img src={EyeIcon} alt="eye" />
         </div>
       )}

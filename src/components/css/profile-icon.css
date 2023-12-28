@@ -1,0 +1,70 @@
+.profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 40px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+    margin: 0 0 0 20px;
+    cursor: pointer;
+  }
+  
+  .profile-icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .profile-icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .profile-icon:hover::after {
+    opacity: 0.8;
+  }
+  
+  .profile-icon span {
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Add a color for each initial */
+  .profile-icon[data-initial="A"] { background-color: #ffadad; color: #000; }
+  .profile-icon[data-initial="B"] { background-color: #ffd6a5; color: #000; }
+  .profile-icon[data-initial="C"] { background-color: #fdffb6; color: #000; }
+  .profile-icon[data-initial="D"] { background-color: #caffbf; color: #000; }
+  .profile-icon[data-initial="E"] { background-color: #9bf6ff; color: #000; }
+  .profile-icon[data-initial="F"] { background-color: #a0c4ff; color: #000; }
+  .profile-icon[data-initial="G"] { background-color: #bdb2ff; color: #000; }
+  .profile-icon[data-initial="H"] { background-color: #ffc6ff; color: #000; }
+  .profile-icon[data-initial="I"] { background-color: #fffffc; color: #000; }
+  .profile-icon[data-initial="J"] { background-color: #fabebe; color: #000; }
+  .profile-icon[data-initial="K"] { background-color: #fabebe; color: #000; }
+  .profile-icon[data-initial="L"] { background-color: #ffd8b1; color: #000; }
+  .profile-icon[data-initial="M"] { background-color: #fffac8; color: #000; }
+  .profile-icon[data-initial="N"] { background-color: #aaffc3; color: #000; }
+  .profile-icon[data-initial="O"] { background-color: #e6beff; color: #000; }
+  .profile-icon[data-initial="P"] { background-color: #fff5ee; color: #000; }
+  .profile-icon[data-initial="Q"] { background-color: #ffe119; color: #000; }
+  .profile-icon[data-initial="R"] { background-color: #008080; color: #fff; }
+  .profile-icon[data-initial="S"] { background-color: #e6194b; color: #fff; }
+  .profile-icon[data-initial="T"] { background-color: #3cb44b; color: #fff; }
+  .profile-icon[data-initial="U"] { background-color: #ffe119; color: #000; }
+  .profile-icon[data-initial="V"] { background-color: #0082c8; color: #fff; }
+  .profile-icon[data-initial="W"] { background-color: #f58231; color: #000; }
+  .profile-icon[data-initial="X"] { background-color: #911eb4; color: #fff; }
+  .profile-icon[data-initial="Y"] { background-color: #46f0f0; color: #000; }
+  .profile-icon[data-initial="Z"] { background-color: #f032e6; color: #fff; }
+  

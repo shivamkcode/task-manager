@@ -5,12 +5,16 @@ aside {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .logo-container {
+  margin-top: 8px;
+  margin-bottom: 15px;
   display: flex;
   align-items: center;
+}
+.logo-container h1{
+  margin: 0;
 }
 .logo {
   background-image: url(../../assets/logo-dark.svg);
@@ -20,21 +24,30 @@ aside {
 }
 
 .board-list {
-  margin-top: 20px;
-  margin-bottom: auto;
+  margin-top: 30px;
   color: #828fa3;
+  max-height: 50%;
+  margin-left: -34px;
+  padding-left: 34px;
+  overflow-y: auto;
 }
 .board-list * {
   margin: 0;
 }
-.board-list h6{
-  font-size: 12px;
-  letter-spacing: 2.4px;
-  margin-bottom: 19px;
+.board-list::-webkit-scrollbar {
+  width: 5px;
+}
+ 
+.board-list::-webkit-scrollbar-thumb {
+  background: #828fa3; 
+  border-radius: 5px;
 }
 
-.modeSelect {
-  margin-bottom: 40px;
+.aside h6{
+  font-size: 12px;
+  letter-spacing: 2.4px;
+  color: #828fa3;
+  margin: 20px 0 0 0;
 }
 
 .mode-change,
@@ -44,32 +57,36 @@ aside {
   gap: 15px;
   margin-bottom: 20px;
   border-radius: 10px;
+  cursor: pointer;
 }
 
 .mode-change {
   background-color: #f4f7fd;
   height: 50px;
-  width: 250px;
+  width: 90%;
   padding: 10px;
   justify-content: center;
+  cursor: auto;
 }
 
 .board-name {
   display: flex;
-  background: transparent;
+  /* background: transparent; */
   margin-left: -34px;
   align-items: center;
   padding-left: 34px;
-  width: 276px;
+  width: 110%;
   height: 48px;
   cursor: pointer;
 }
 
 .selected {
-  background-color: #635fc7;
+  border-radius: 0 100px 100px 0;
+  background: #635fc7;
   color: white;
-  border-radius: 0px 100px 100px 0px;
+  align-items: center;
 }
+
 .selected img{
   filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(220deg) brightness(800%) contrast(90%);
 }
@@ -78,24 +95,19 @@ aside {
   font-size: 15px;
 }
 
+.add-board{
+  margin-top: 0px;
+  margin-bottom: auto;
+}
+
 .board-name img {
   height: 16px;
   align-self: center;
   margin-right: 10px;
 }
 
-.selected {
-  height: 48px;
-  width: 276px;
-  border-radius: 0 100px 100px 0;
-  background: #635fc7;
-  color: white;
-  align-items: center;
-}
-
 .switch {
   position: relative;
-  display: inline-block;
   width: 60px;
   height: 34px;
 }

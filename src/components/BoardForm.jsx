@@ -73,6 +73,8 @@ const BoardForm = ({ showForm, selectedBoard, mode, getBoards }) => {
       getBoards(token)
     } else {
       addNewBoard(boardName, token, boardColumns);
+      getBoards(token)
+
     }
   };
 

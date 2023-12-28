@@ -19,13 +19,14 @@ const Board = ({
   setIsOpen,
   getBoards,
   setChosenBoardId,
+  sidebarVisible,
 }) => {
   const [taskDetails, setTaskDetails] = useState(false);
   const [showTaskEditOption, setShowTaskEditOption] = useState(false);
   const [showTaskEditForm, setShowTaskEditForm] = useState(false);
   const [showTaskDeleteForm, setShowTaskDeleteForm] = useState(false);
   const [tasks, setTasks] = useState(
-    boards.find((board) => board.id === boardId)?.tasks || []
+    boards?.find((board) => board.id === boardId)?.tasks || []
   );
   const [selectedTask, setSelectedTask] = useState();
 
@@ -77,25 +78,20 @@ const Board = ({
       return;
     }
 
-    // Find the task that was dragged and the column it was dragged to
     const draggedTask = tasks.find((task) => task.id === parseInt(draggableId));
     const newColumn = selectedColumns.find(
       (col) => col.id === parseInt(destination.droppableId)
     );
 
     if (draggedTask && newColumn) {
-      // Update the status of the dragged task
       draggedTask.status = newColumn.status;
 
-      // Remove the dragged task from its original position in the tasks array
       const newTasks = tasks.filter((task) => task.id !== draggedTask.id);
 
-      // Insert the dragged task at its new position in the tasks array
       newTasks.splice(destination.index, 0, draggedTask);
 
       setTasks(newTasks);
 
-      // Update the task in the backend
       await updateTask(
         draggedTask.id,
         draggedTask.title,
@@ -107,11 +103,11 @@ const Board = ({
   };
 
   useEffect(() => {
-    setTasks(boards.find((board) => board.id === boardId)?.tasks || []);
+    setTasks(boards?.find((board) => board.id === boardId)?.tasks || []);
   }, [boardId, boards]);
 
   return (
-    <div className="board">
+    <div className={`board ${sidebarVisible ? "" : "noSideBar-board"}`}>
       {selectedColumns.length > 0 && (
         <div className="column-container">
           <DragDropContext onDragEnd={handleDragEnd}>
@@ -195,6 +191,7 @@ const Board = ({
                                           alt="dots"
                                         />
                                       </div>
+                                      <p>{task.description}</p>
                                       {showTaskEditOption && (
                                         <div className="edit-option">
                                           <span
@@ -230,70 +227,75 @@ const Board = ({
                                           </span>
                                         </div>
                                       )}
-                                      <p>{task.description}</p>
-                                      <h6>
-                                        Subtasks(
-                                        {
-                                          task.subtasks.filter(
-                                            (subtask) => subtask.completed
-                                          ).length
-                                        }{" "}
-                                        of {task.subtasks.length})
-                                      </h6>
-                                      {selectedTask.subtasks.map(
-                                        (subtask, i) => (
-                                          <Checkbox
-                                            key={i}
-                                            initialChecked={subtask.completed}
-                                            onCheckboxChange={() => {
-                                              const updatedSubtasks =
-                                                selectedTask.subtasks.map(
-                                                  (st) => {
-                                                    if (st === subtask) {
-                                                      return {
-                                                        ...st,
-                                                        completed:
-                                                          !st.completed,
-                                                      };
-                                                    } else {
-                                                      return st;
-                                                    }
-                                                  }
-                                                );
+                                      {task.subtasks && (
+                                        <label>
+                                          Subtasks (
+                                          {
+                                            task.subtasks.filter(
+                                              (subtask) => subtask.completed
+                                            ).length
+                                          }{" "}
+                                          of {task.subtasks.length})
+                                          {selectedTask.subtasks.map(
+                                            (subtask, i) => (
+                                              <Checkbox
+                                                key={i}
+                                                initialChecked={
+                                                  subtask.completed
+                                                }
+                                                onCheckboxChange={() => {
+                                                  const updatedSubtasks =
+                                                    selectedTask.subtasks.map(
+                                                      (st) => {
+                                                        if (st === subtask) {
+                                                          return {
+                                                            ...st,
+                                                            completed:
+                                                              !st.completed,
+                                                          };
+                                                        } else {
+                                                          return st;
+                                                        }
+                                                      }
+                                                    );
 
-                                              setSelectedTask({
-                                                ...selectedTask,
-                                                subtasks: updatedSubtasks,
-                                              });
-                                            }}
-                                          >
-                                            {subtask.title}
-                                          </Checkbox>
-                                        )
+                                                  setSelectedTask({
+                                                    ...selectedTask,
+                                                    subtasks: updatedSubtasks,
+                                                  });
+                                                }}
+                                              >
+                                                {subtask.title}
+                                              </Checkbox>
+                                            )
+                                          )}
+                                        </label>
                                       )}
-                                      <h6>Current Status</h6>
-                                      <select
-                                        name="Status"
-                                        value={selectedTask.status}
-                                        onChange={(e) =>
-                                          setSelectedTask({
-                                            ...selectedTask,
-                                            status: e.target.value,
-                                          })
-                                        }
-                                        required
-                                      >
-                                        {selectedColumns.map((column) => {
-                                          return (
-                                            <option
-                                              key={column.id}
-                                              value={column.status}
-                                            >
-                                              {column.status}
-                                            </option>
-                                          );
-                                        })}
-                                      </select>
+                                      <label>
+                                        Current Status
+                                        <select
+                                          name="Status"
+                                          value={selectedTask.status}
+                                          onChange={(e) =>
+                                            setSelectedTask({
+                                              ...selectedTask,
+                                              status: e.target.value,
+                                            })
+                                          }
+                                          required
+                                        >
+                                          {selectedColumns.map((column) => {
+                                            return (
+                                              <option
+                                                key={column.id}
+                                                value={column.status}
+                                              >
+                                                {column.status}
+                                              </option>
+                                            );
+                                          })}
+                                        </select>
+                                      </label>
                                       <Button onClick={updateTaskDetails}>
                                         Submit Changes
                                       </Button>
@@ -313,14 +315,17 @@ const Board = ({
         </div>
       )}
       {isOpen.addBoard && (
-        <BoardForm showForm={() => setIsOpen({ addBoard: false })} />
+        <BoardForm
+          getBoards={getBoards}
+          showForm={() => setIsOpen({ addBoard: false })}
+        />
       )}
       {selectedColumns.length === 0 && (
         <div className="empty-board">
-          <p>
-            This board is empty. Create a new column to get started. Go to edit
-            board to add a new column.
-          </p>
+          <p>This board is empty. Create a new column to get started.</p>
+          <Button onClick={() => setIsOpen({ editBoardForm: true })}>
+            +Create New Column
+          </Button>
         </div>
       )}
       {isOpen.showTaskForm && (

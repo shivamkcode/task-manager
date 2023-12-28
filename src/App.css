@@ -18,21 +18,16 @@ img {
 }
 
 .nav {
-  grid-area: 1 / 2;
+  grid-area: 1 / 2 / 1 / 5;
   display: flex;
   padding: 25px;
   justify-content: space-between;
   align-items: center;
-  position: relative;
 }
 
 .nav > button {
-  margin-right: 24px;
+  margin-right: 3vh;
   margin-left: auto;
-}
-
-.nav img {
-  height: 20px;
 }
 
 label {
@@ -40,14 +35,12 @@ label {
 }
 
 .nav .card button,
-select,
 textarea,
 .aside button,
 .task-details button,
 .board button {
   padding: 8px;
   width: 100%;
-  margin-bottom: 20px;
   background: transparent;
 }
 
@@ -58,11 +51,15 @@ aside {
   grid-area: 2 / 2;
   background: #f4f7fd;
   height: calc(100vh - 100px);
-  padding: 24px 0 0 24px;
+  padding: 3vh 0 0 3vh;
   overflow-x: auto;
 }
 .board::-webkit-scrollbar {
-  display: none;
+  height: 5px;
+  width: 0;
+}
+.board::-webkit-scrollbar-thumb {
+  background: #666; 
 }
 .empty-board {
   justify-self: center;
@@ -78,9 +75,15 @@ aside {
   align-items: center;
   justify-content: space-between;
 }
+.card h3{
+  margin-top: 0;
+}
 
 textarea {
   resize: none;
+  margin-bottom: 3vh;
+  border-radius: 4px;
+  margin-top: 2vh;
 }
 
 textarea::-webkit-scrollbar, .columns::-webkit-scrollbar {
@@ -91,25 +94,26 @@ textarea::-webkit-scrollbar, .columns::-webkit-scrollbar {
   display: flex;
   align-items: center;
 }
+.subtask + .subtask{
+  margin-top: -4vh;
+}
 .subtask img {
   margin-left: 10px;
   height: 14px;
 }
 .card input {
-  margin-bottom: 24px;
-}
-.subtask input {
-  margin-bottom: 12px;
+  margin-bottom: 3vh;
+  margin-top: 2vh;
 }
 .edit-option {
   width: 192px;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 2vh;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0px 10px 20px 0px rgba(54, 78, 126, 0.25);
-  padding: 16px;
+  padding: 2vh;
   align-items: left;
   justify-content: center;
   position: absolute;
@@ -123,7 +127,7 @@ textarea::-webkit-scrollbar, .columns::-webkit-scrollbar {
 .column-container {
   margin-top: 15px;
   display: flex;
-  gap: 24px;
+  gap: 3vh;
   position: relative;
 }
 .columns {
@@ -152,7 +156,7 @@ textarea::-webkit-scrollbar, .columns::-webkit-scrollbar {
   box-shadow: 0px 4px 6px 0px rgba(54, 78, 126, 0.1);
   border-radius: 8px;
   background: white;
-  padding: 23px 16px;
+  padding: 23px 2vh;
   margin-top: 20px;
 }
 .task-box h3 {
@@ -164,11 +168,12 @@ textarea::-webkit-scrollbar, .columns::-webkit-scrollbar {
   font-size: 12px;
 }
 .task-details {
-  padding: 20px;
-  padding-bottom: 0;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+}
+.card label{
+  margin-bottom: 8px;
+  margin-top: 2vh;
 }
 .task-details h3 {
   font-size: 18px;
@@ -176,8 +181,146 @@ textarea::-webkit-scrollbar, .columns::-webkit-scrollbar {
 .task-details p {
   color: #828fa3;
   font-size: 13px;
-  margin-bottom: 20px;
+  margin-top: 3vh;
+  margin-bottom: 8px;
 }
 .task-details img {
-  margin-left: 10px;
+  margin-left: 15px;
+}
+.card select{
+  margin-top: 2vh;
+  margin-bottom: 20px;
+}
+.passwordInput{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 3vh;
+}
+.passwordInput input{
+  margin-bottom: 0;
+}
+.passwordInput img{
+  filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(210deg) brightness(12%) contrast(100%);
+  position: absolute;
+  opacity: 0.7;
+  width: 15px;
+  right: 10px;
+}
+.passwordInput img:hover{
+  filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(210deg) brightness(100%) contrast(100%);
+}
+.profile *{
+  margin: 0;
+  padding: 0;
+}
+.profile{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 10px;
+  /* height: 300px; */
+  width: 200px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px 0px rgba(54, 78, 126, 0.35);
+  margin: 0 30px auto auto;
+}
+.profile-board{
+  display: flex;
+} 
+.profile-board button{
+  margin-bottom: 0;
+}
+.profile .profile-icon{
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  font-size: 50px;
+  margin-left: 0;
+  opacity: 0.9;
+}
+.profile .profile-icon::after {
+  width: 80px;
+  height: 80px;
+}
+.profile p{
+  opacity: 0.5;
+  font-size: 10px;
+  margin-bottom: -10px;
+}
+.show-sidebar{
+  background: #635FC7;
+  width: 56px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 50px 50px 0;
+  position: absolute;
+  bottom: 100px;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.noSideBar-nav{
+  grid-area: 1 / 1 / 1 / 5;
+}
+.noSideBar-nav h2{
+  margin: 0 auto;
+}
+.noSideBar-board{
+  grid-area: 2 / 1 / 2 / 5;
+}
+.invite-container{
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  margin-right: 20px;
+  margin-bottom: auto;
+  box-shadow: 0px 10px 20px 0px rgba(54, 78, 126, 0.35);
+}
+.invite-container *{
+  margin: 0;
+  padding: 0;
+  color: #828fa3;
+}
+
+.invite-box {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  width: 50%;
+}
+
+.invite {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f4f7fa;
+  border-radius: 5px;
+  box-shadow: 0px 5px 5px 0px rgba(54, 78, 126, 0.1);
+}
+
+.invite-container h1, .invite-container h3 {
+  color: #635FC7;
+}
+.invite-container button{
+  width: 150px;
+}
+.invite-box-container, .invite-buttons{
+  margin: 10px auto;
+  display: flex;
+  gap: 20px;
+}
+select{
+  height: 40px;
+  border: 1px solid #828fa31A;
+  border-radius: 4px;
+  padding: 8px 2vh;
+  width: 100%;
 }

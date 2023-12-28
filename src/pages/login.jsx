@@ -3,9 +3,11 @@ import Card from "../components/Card";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import Input from "../components/Input";
+import Eye from "../assets/icon-hide-sideBar.svg";
+import EyeIcon from "../assets/icon-show-sidebar.svg";
 
 // eslint-disable-next-line react/prop-types
-const LoginPage = ({ isOpen }) => {
+const LoginPage = ({ isOpen, showPassword, setShowPassword }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -24,7 +26,7 @@ const LoginPage = ({ isOpen }) => {
       const data = await response.json();
       localStorage.setItem("token", data.token);
       setMessage("Login successful!");
-      navigate('/')
+      navigate("/");
     } else {
       setMessage("Login failed.");
     }
@@ -38,14 +40,23 @@ const LoginPage = ({ isOpen }) => {
           type={"email"}
           placeholder={"email"}
           value={email}
+          capital={false}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <Input
-          type={"password"}
-          placeholder={"Password"}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div className="passwordInput">
+          <Input
+            type={showPassword ? "text" : "password"}
+            placeholder={"Password"}
+            value={password}
+            capital={false}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <img
+            onClick={() => setShowPassword(!showPassword)}
+            src={showPassword ? EyeIcon : Eye}
+            alt="eye"
+          />
+        </div>
         <Button disabled={!email || !password} onClick={() => handleLogin()}>
           Login
         </Button>

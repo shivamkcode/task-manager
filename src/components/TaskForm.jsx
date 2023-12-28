@@ -14,7 +14,7 @@ const TaskForm = ({
   selectedTask,
   id,
   mode,
-updateTask,
+  updateTask,
 }) => {
   const [task, setTask] = useState({
     heading: "Add New",
@@ -63,8 +63,6 @@ updateTask,
       console.log("Error creating task:", response.status);
     }
   };
-
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
