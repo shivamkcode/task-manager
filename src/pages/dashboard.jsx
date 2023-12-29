@@ -13,7 +13,11 @@ const Dashboard = ({
   chosenBoardId,
   setChosenBoardId,
   boards,
-  getBoards
+  getBoards,
+  getUser,
+  windowWidth,
+  darkMode,
+  setDarkMode,
 }) => {
   const [selectedColumns, setSelectedColumns] = useState([]);
 
@@ -32,15 +36,20 @@ const Dashboard = ({
         sidebarVisible={sidebarVisible}
         userName={userName}
         boards={boards}
+        windowWidth={windowWidth}
+        setSidebarVisible={setSidebarVisible}
       />
       <SideBar
         isOpen={isOpen}
         setIsOpen={setIsOpen}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
         boards={boards}
         chosenBoardId={chosenBoardId}
         setChosenBoardId={setChosenBoardId}
         sidebarVisible={sidebarVisible}
         setSidebarVisible={setSidebarVisible}
+        windowWidth={windowWidth}
       />
       <Board
         boardName={boards?.find((board) => board.id === chosenBoardId)?.name}
@@ -52,6 +61,9 @@ const Dashboard = ({
         setIsOpen={setIsOpen}
         setChosenBoardId={setChosenBoardId}
         sidebarVisible={sidebarVisible}
+        getUser={getUser}
+        windowWidth={windowWidth}
+        darkMode={darkMode}
       />
     </main>
   );

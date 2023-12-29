@@ -20,6 +20,9 @@ const Board = ({
   getBoards,
   setChosenBoardId,
   sidebarVisible,
+  getUser,
+  windowWidth,
+  darkMode
 }) => {
   const [taskDetails, setTaskDetails] = useState(false);
   const [showTaskEditOption, setShowTaskEditOption] = useState(false);
@@ -30,8 +33,18 @@ const Board = ({
   );
   const [selectedTask, setSelectedTask] = useState();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return;
+    }
+    getBoards(token);
+    getUser(token);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const updateTask = async (id, title, description, status, subTasks) => {
-    const response = await fetch(`http://localhost:3000/tasks/${id}`, {
+    const response = await fetch(`https://task-manager-server-ashy.vercel.app/tasks/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -312,12 +325,29 @@ const Board = ({
                 </Droppable>
               ))}
           </DragDropContext>
+          <div className="columns new-column">
+            <h3 onClick={() => setIsOpen({ editBoardForm: true })}>
+              + New Column
+            </h3>
+          </div>
         </div>
       )}
+      {sidebarVisible && windowWidth < 600 && (<div
+        style={{
+          position: "absolute",
+          top: '80px',
+          left: 0,
+          width: "100vw",
+          height: "calc(100vh - 90px)",
+          backgroundColor: "rgba(0,0,0,0.5)",
+          zIndex: "999",
+        }}
+      />)}
       {isOpen.addBoard && (
         <BoardForm
           getBoards={getBoards}
           showForm={() => setIsOpen({ addBoard: false })}
+          darkMode={darkMode}
         />
       )}
       {selectedColumns.length === 0 && (
@@ -335,6 +365,7 @@ const Board = ({
           boardId={boardId}
           mode=""
           showForm={() => setIsOpen({ showTaskForm: false })}
+          darkMode={darkMode}
         />
       )}
       {showTaskEditForm && (
@@ -347,6 +378,7 @@ const Board = ({
           selectedTask={selectedTask}
           id={selectedTask.id}
           selectedColumns={selectedColumns}
+          darkMode={darkMode}
         />
       )}
       {showTaskDeleteForm && (
@@ -367,6 +399,7 @@ const Board = ({
           mode="edit"
           showForm={() => setIsOpen({ editBoardForm: false })}
           getBoards={getBoards}
+          darkMode={darkMode}
         />
       )}
       {isOpen.deleteBoardForm && (

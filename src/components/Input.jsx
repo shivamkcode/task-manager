@@ -1,30 +1,37 @@
-
-// eslint-disable-next-line react/prop-types
-const Input = ({ type = 'text',autoComplete ='off', value, onChange, placeholder, capital = true }) => {
+/* eslint-disable react/prop-types */
+const Input = ({
+  type = "text",
+  autoComplete = "off",
+  value,
+  onChange,
+  placeholder,
+  capital = true,
+  className,
+}) => {
   const style = {
-    width: '100%',
-    padding: '10px',
-    backgroundColor: 'transparent',
-    border: '1px solid rgba(0,0,0,0.5)',
-    borderRadius: '4px',
-    boxSizing: 'border-box',
+    width: "100%",
+    padding: "10px",
+    backgroundColor: "transparent",
+    border: "1px solid #828fa3",
+    borderRadius: "4px",
+    color: "var(--text-color)",
+    boxSizing: "border-box",
   };
 
-  function capitalize(s)
-{
+  function capitalize(s) {
     return s && s[0].toUpperCase() + s.slice(1);
-}
+  }
 
   return (
-    <input 
-      style={style} 
-      type={type} 
-      // eslint-disable-next-line react/prop-types
-      value={capital ? capitalize(value) : value} 
+    <input
+      className={className}
+      style={style}
+      type={type}
+      value={capital ? capitalize(value) : value}
       autoComplete={autoComplete}
       autoCapitalize="on"
       autoCorrect="on"
-      onChange={onChange} 
+      onChange={onChange}
       placeholder={placeholder}
       required
     />

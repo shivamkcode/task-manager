@@ -6,7 +6,7 @@ import Input from "./Input";
 import { useEffect, useState } from "react";
 
 // eslint-disable-next-line react/prop-types
-const BoardForm = ({ showForm, selectedBoard, mode, getBoards }) => {
+const BoardForm = ({ showForm, selectedBoard, mode, getBoards, darkMode }) => {
   const [boardName, setBoardName] = useState(mode ? selectedBoard.name : "");
   const [boardColumns, setBoardColumns] = useState([
     { status: "TODO" },
@@ -22,7 +22,7 @@ const BoardForm = ({ showForm, selectedBoard, mode, getBoards }) => {
   }, [mode, selectedBoard]);
 
   const addNewBoard = async (name, token, columns) => {
-    const response = await fetch("http://localhost:3000/boards", {
+    const response = await fetch("https://task-manager-server-ashy.vercel.app/boards", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -40,7 +40,7 @@ const BoardForm = ({ showForm, selectedBoard, mode, getBoards }) => {
   };
 
   const updateBoard = async ( id, name, token, columns) => {
-    const response = await fetch(`http://localhost:3000/boards/${id}`, {
+    const response = await fetch(`https://task-manager-server-ashy.vercel.app/boards/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -72,9 +72,8 @@ const BoardForm = ({ showForm, selectedBoard, mode, getBoards }) => {
       await updateBoard( selectedBoard.id, boardName, token, boardColumns )
       getBoards(token)
     } else {
-      addNewBoard(boardName, token, boardColumns);
+      await addNewBoard(boardName, token, boardColumns);
       getBoards(token)
-
     }
   };
 
@@ -88,7 +87,7 @@ const BoardForm = ({ showForm, selectedBoard, mode, getBoards }) => {
     <Card showShadow={true}>
       <div className="card-header">
         <h3>{mode ? "Edit" : "Add New"} board</h3>
-        <img onClick={() => showForm()} src={Cross} alt="X" />
+        <img className="cross" onClick={() => showForm()} src={Cross} alt="X" />
       </div>
       <form action="submit">
         <label htmlFor="name">
@@ -111,13 +110,13 @@ const BoardForm = ({ showForm, selectedBoard, mode, getBoards }) => {
                 onChange={handleBoardColumnChange(index)}
                 required
               />
-              <img onClick={() => removeColumn(index)} src={Cross} alt="X" />
+              <img className="cross" onClick={() => removeColumn(index)} src={Cross} alt="X" />
             </div>
           ))}
         </label>
         <Button
           textColor="#635FC7"
-          color={"rgba(99, 95, 199, 0.10)"}
+          color={`${darkMode ? 'white' : '#635FC71A'}`}
           onClick={addNewColumn}
         >
           +Add New Column

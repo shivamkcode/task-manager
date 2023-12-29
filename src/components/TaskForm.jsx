@@ -15,6 +15,7 @@ const TaskForm = ({
   id,
   mode,
   updateTask,
+  darkMode,
 }) => {
   const [task, setTask] = useState({
     heading: "Add New",
@@ -48,7 +49,7 @@ const TaskForm = ({
   }, [mode, selectedTask, selectedColumns]);
 
   const addNewTask = async (title, description, status, boardId, subTasks) => {
-    const response = await fetch("http://localhost:3000/tasks", {
+    const response = await fetch("https://task-manager-server-ashy.vercel.app/tasks", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -154,7 +155,7 @@ const TaskForm = ({
     <Card showShadow={true}>
       <div className="card-header">
         <h3>{task.heading} Task</h3>
-        <img onClick={() => showForm()} src={Cross} alt="" />
+        <img className="cross" onClick={() => showForm()} src={Cross} alt="" />
       </div>
       <form action="submit">
         <label>
@@ -196,13 +197,14 @@ recharge the batteries a little."
                   );
                 }}
               />
-              <img onClick={() => removeSubTask(index)} src={Cross} alt="X" />
+              <img className="cross" onClick={() => removeSubTask(index)} src={Cross} alt="X" />
             </div>
           ))}
         </label>
         <Button
+          className={'subtask-button'}
           textColor="#635FC7"
-          color={"rgba(99, 95, 199, 0.10)"}
+          color={`${darkMode ? 'white' : '#635FC71A'}`}
           onClick={addSubTask}
         >
           +Add New Subtask

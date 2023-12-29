@@ -17,9 +17,12 @@ const Profile = ({
   setSidebarVisible,
   isOpen,
   setIsOpen,
+  darkMode,
+  setDarkMode,
   boards,
   chosenBoardId,
   setChosenBoardId,
+  windowWidth,
 }) => {
   const [inviteForm, setInviteForm] = useState(false);
   const [emailInput, setEmailInput] = useState({
@@ -33,7 +36,7 @@ const Profile = ({
   const userInitial = user ? user.username[0].toUpperCase() : "";
 
   const sendInvite = async (inviterId, inviteeEmail, boardId) => {
-    const response = await fetch("http://localhost:3000/invites", {
+    const response = await fetch("https://task-manager-server-ashy.vercel.app/invites", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,7 +55,7 @@ const Profile = ({
 
   const sentInvite = async (userId) => {
     const response = await fetch(
-      `http://localhost:3000/invites/sent/${userId}`,
+      `https://task-manager-server-ashy.vercel.app/invites/sent/${userId}`,
       {
         method: "GET",
         headers: {
@@ -70,7 +73,7 @@ const Profile = ({
   };
 
   const recievedInvite = async (userId) => {
-    const response = await fetch(`http://localhost:3000/invites/${userId}`, {
+    const response = await fetch(`https://task-manager-server-ashy.vercel.app/invites/${userId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -106,15 +109,23 @@ const Profile = ({
   return (
     <>
       <div className="container">
-        <NavBar sidebarVisible={sidebarVisible} userName={user?.username} />
+        <NavBar
+          windowWidth={windowWidth}
+          sidebarVisible={sidebarVisible}
+          setSidebarVisible={setSidebarVisible}
+          userName={user?.username}
+        />
         <SideBar
           isOpen={isOpen}
           setIsOpen={setIsOpen}
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
           boards={boards}
           chosenBoardId={chosenBoardId}
           setChosenBoardId={setChosenBoardId}
           sidebarVisible={sidebarVisible}
           setSidebarVisible={setSidebarVisible}
+          windowWidth={windowWidth}
         />
         <div
           className={`board profile-board ${
@@ -122,11 +133,11 @@ const Profile = ({
           }`}
         >
           <div className="invite-container">
-            <div className="card-header">
+            <div className="invite-header">
               <h1>Manage Invitations:</h1>
               {boards?.length > 0 && (
                 <Button
-                  color="#635FC71A"
+                  color={`${darkMode ? 'white' : '#635FC71A'}`}
                   textColor="#635FC7"
                   onClick={() => setInviteForm(true)}
                 >
@@ -256,6 +267,17 @@ const Profile = ({
           </Button>
         </Card>
       )}
+      {sidebarVisible && windowWidth < 600 && (<div
+        style={{
+          position: "absolute",
+          top: '80px',
+          left: 0,
+          width: "100vw",
+          height: "calc(100vh - 90px)",
+          backgroundColor: "rgba(0,0,0,0.5)",
+          zIndex: "999",
+        }}
+      />)}
     </>
   );
 };

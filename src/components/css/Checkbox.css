@@ -1,15 +1,20 @@
 .checkbox {
-  margin-bottom: -16px;
-  background: #f4f7fd;
-  padding: 13px;
+  background:var(--secondary-color);
+  padding: 0 12px;
   display: flex;
   align-items: center;
   border-radius: 4px;
+  cursor: pointer;
+}
+.checkbox:hover, .checkbox input:hover{
+  scale: 0.99;
+  transition: all 0.3s ease;
+}
+
+input[type='checkbox'] {
+  accent-color: #635fc7;
 }
 
 .checkbox input {
   margin-right: 10px;
-  align-self: center;
-  margin-bottom: 0;
-  cursor: pointer;
 }

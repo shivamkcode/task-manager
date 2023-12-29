@@ -7,7 +7,7 @@ const Invite = ({ invite, type }) => {
 
   const handleAccept = async (task) => {
     const response = await fetch(
-      `http://localhost:3000/invites/${invite.id}/${task}`,
+      `https://task-manager-server-ashy.vercel.app/invites/${invite.id}/${task}`,
       {
         method: "PUT",
       }

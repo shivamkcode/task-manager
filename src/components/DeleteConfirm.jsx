@@ -10,7 +10,7 @@ const DeleteConfirm = ({
   getBoards,
 }) => {
   const deleteBoard = async (id, token) => {
-    const response = await fetch(`http://localhost:3000/boards/${id}`, {
+    const response = await fetch(`https://task-manager-server-ashy.vercel.app/boards/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `${token}`,
@@ -24,7 +24,7 @@ const DeleteConfirm = ({
   };
 
   const deleteTask = async (id, token) => {
-    const response = await fetch(`http://localhost:3000/tasks/${id}`, {
+    const response = await fetch(`https://task-manager-server-ashy.vercel.app/tasks/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `${token}`,

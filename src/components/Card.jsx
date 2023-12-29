@@ -22,7 +22,6 @@ const Card = ({ children, showShadow }) => {
             minWidth: '340px',
             maxWidth: '480px',
             transform: 'translate(-50%, -50%)',
-            backgroundColor: '#fff',
             padding: '4vh',
             borderRadius: '6px',
             zIndex: '1000',

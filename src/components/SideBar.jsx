@@ -6,6 +6,7 @@ import DarkThemeIcon from "../assets/icon-dark-theme.svg";
 import LightThemeIcon from "../assets/icon-light-theme.svg";
 import EyeIcon from "../assets/icon-show-sidebar.svg";
 import HideEyeIcon from "../assets/icon-hide-sidebar.svg";
+import { useEffect } from "react";
 
 const SideBar = ({
   setIsOpen,
@@ -14,15 +15,47 @@ const SideBar = ({
   setChosenBoardId,
   sidebarVisible,
   setSidebarVisible,
+  windowWidth,
+  darkMode,
+  setDarkMode,
 }) => {
+  const toggle = () => {
+    let r = document.querySelector(":root");
+    if (!darkMode) {
+      r.style.setProperty("--primary-color", "#2B2C37");
+      r.style.setProperty("--secondary-color", "#20212C");
+      r.style.setProperty("--text-color", "#fff");
+    } else {
+      r.style.setProperty("--primary-color", "#fff");
+      r.style.setProperty("--secondary-color", "#F4F7FD");
+      r.style.setProperty("--text-color", "black");
+    }
+  };
+
+  useEffect(() => {
+    let r = document.querySelector(":root");
+    if (darkMode) {
+      r.style.setProperty("--primary-color", "#2B2C37");
+      r.style.setProperty("--secondary-color", "#20212C");
+      r.style.setProperty("--text-color", "#fff");
+    } else {
+      r.style.setProperty("--primary-color", "#fff");
+      r.style.setProperty("--secondary-color", "#F4F7FD");
+      r.style.setProperty("--text-color", "black");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="aside">
       {sidebarVisible && (
         <aside>
-          <div className="logo-container">
-            <div className="logo" />
-            <h1>App Name</h1>
-          </div>
+          {windowWidth > 600 && (
+            <div className="logo-container">
+              <div className="logo" />
+              <h1>TaskTracker</h1>
+            </div>
+          )}
           <h6>ALL BOARDS ({boards?.length})</h6>
           <div className="board-list">
             {boards?.length > 0 &&
@@ -63,28 +96,29 @@ const SideBar = ({
               <label className="switch">
                 <input
                   type="checkbox"
-                  onClick={() =>
-                    setIsOpen((prevState) => ({
-                      ...prevState,
-                      darkMode: !prevState.darkMode,
-                    }))
-                  }
+                  onClick={() => {
+                    setDarkMode(!darkMode);
+
+                    toggle();
+                  }}
                 />
                 <span className="slider round"></span>
               </label>
               <img src={DarkThemeIcon} alt="moon" />
             </div>
-            <div
-              className="hide-sidebar"
-              onClick={() => setSidebarVisible(false)}
-            >
-              <img src={HideEyeIcon} alt="eye" />
-              <span>Hide SideBar</span>
-            </div>
+            {windowWidth > 600 && (
+              <div
+                className="hide-sidebar"
+                onClick={() => setSidebarVisible(false)}
+              >
+                <img src={HideEyeIcon} alt="eye" />
+                <span>Hide SideBar</span>
+              </div>
+            )}
           </div>
         </aside>
       )}
-      {!sidebarVisible && (
+      {!sidebarVisible && windowWidth > 600 && (
         <div className="show-sidebar" onClick={() => setSidebarVisible(true)}>
           <img src={EyeIcon} alt="eye" />
         </div>
