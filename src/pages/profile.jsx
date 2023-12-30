@@ -23,6 +23,7 @@ const Profile = ({
   chosenBoardId,
   setChosenBoardId,
   windowWidth,
+  showAlert,
 }) => {
   const [inviteForm, setInviteForm] = useState(false);
   const [emailInput, setEmailInput] = useState({
@@ -36,7 +37,7 @@ const Profile = ({
   const userInitial = user ? user.username[0].toUpperCase() : "";
 
   const sendInvite = async (inviterId, inviteeEmail, boardId) => {
-    const response = await fetch("https://task-manager-server-ashy.vercel.app/invites", {
+    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/invites`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,16 +47,16 @@ const Profile = ({
     });
 
     if (response.ok) {
-      const invite = await response.json();
-      console.log("Invite Sent:", invite);
+      // const invite = await response.json();
+      showAlert("Invite Sent Successfully", 'success');
     } else {
-      console.log("Error inviting user:", response.status);
+      showAlert("Error inviting user", 'error');
     }
   };
 
   const sentInvite = async (userId) => {
     const response = await fetch(
-      `https://task-manager-server-ashy.vercel.app/invites/sent/${userId}`,
+      `${import.meta.env.VITE_SOME_SERVER}/invites/sent/${userId}`,
       {
         method: "GET",
         headers: {
@@ -73,7 +74,7 @@ const Profile = ({
   };
 
   const recievedInvite = async (userId) => {
-    const response = await fetch(`https://task-manager-server-ashy.vercel.app/invites/${userId}`, {
+    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/invites/${userId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -126,6 +127,7 @@ const Profile = ({
           sidebarVisible={sidebarVisible}
           setSidebarVisible={setSidebarVisible}
           windowWidth={windowWidth}
+          userName={user?.username}
         />
         <div
           className={`board profile-board ${
@@ -243,7 +245,6 @@ const Profile = ({
               value={boardId}
               onChange={(e) => {
                 setBoardId(e.target.value);
-                console.log(e.target.value);
               }}
               required
             >

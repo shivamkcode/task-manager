@@ -8,32 +8,33 @@ const DeleteConfirm = ({
   hideForm,
   id,
   getBoards,
+  showAlert,
 }) => {
   const deleteBoard = async (id, token) => {
-    const response = await fetch(`https://task-manager-server-ashy.vercel.app/boards/${id}`, {
+    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/boards/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `${token}`,
       },
     });
     if (response.ok) {
-      console.log("Board and all its tasks are deleted successfully");
+      showAlert("Board and all its tasks are deleted successfully", 'success');
     } else {
-      console.log("Error deleting the board:", response.status);
+      showAlert("Error deleting the board:", 'error');
     }
   };
 
   const deleteTask = async (id, token) => {
-    const response = await fetch(`https://task-manager-server-ashy.vercel.app/tasks/${id}`, {
+    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/tasks/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `${token}`,
       },
     });
     if (response.ok) {
-      console.log("Task deleted successfully");
+      showAlert("Task deleted successfully", 'success');
     } else {
-      console.log("Error deleting the task:", response.status);
+      showAlert("Error deleting the task:", 'error');
     }
   };
 

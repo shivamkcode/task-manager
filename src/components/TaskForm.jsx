@@ -16,6 +16,7 @@ const TaskForm = ({
   mode,
   updateTask,
   darkMode,
+  showAlert,
 }) => {
   const [task, setTask] = useState({
     heading: "Add New",
@@ -49,7 +50,7 @@ const TaskForm = ({
   }, [mode, selectedTask, selectedColumns]);
 
   const addNewTask = async (title, description, status, boardId, subTasks) => {
-    const response = await fetch("https://task-manager-server-ashy.vercel.app/tasks", {
+    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/tasks`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -58,10 +59,10 @@ const TaskForm = ({
     });
 
     if (response.ok) {
-      const task = await response.json();
-      console.log("Task created:", task);
+      // const task = await response.json();
+      showAlert("Task created successfully", 'success');
     } else {
-      console.log("Error creating task:", response.status);
+      showAlert("Error creating task", 'error');
     }
   };
 

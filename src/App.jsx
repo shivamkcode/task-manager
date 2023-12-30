@@ -6,6 +6,7 @@ import Dashboard from "./pages/dashboard";
 import { useEffect, useState } from "react";
 import Profile from "./pages/profile";
 import { RouteProvider } from "./components/RouteContext";
+import Alert from "./components/Alert";
 
 const App = () => {
   const [isOpen, setIsOpen] = useState({
@@ -16,32 +17,39 @@ const App = () => {
     showEditBoard: false,
   });
   const [user, setUser] = useState();
-  const [showPassword, setShowPassword] = useState(false);
-  const [chosenBoardId, setChosenBoardId] = useState(() => JSON.parse(localStorage.getItem('chosenBoardId')) || null);
+  const [alert, setAlert] = useState(null);
+  const [chosenBoardId, setChosenBoardId] = useState(
+    () => JSON.parse(localStorage.getItem("chosenBoardId")) || null
+  );
   const [boards, setBoards] = useState([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [sidebarVisible, setSidebarVisible] = useState(() => (
-    JSON.parse(localStorage.getItem('sideBar')) !== undefined ? JSON.parse(localStorage.getItem('sideBar')) :
-    windowWidth > 600 ? true : false
-  ));
-  const [darkMode, setDarkMode] = useState(JSON.parse(localStorage.getItem('darkMode')) || false);
+  const [sidebarVisible, setSidebarVisible] = useState(() =>
+    JSON.parse(localStorage.getItem("sideBar")) !== undefined
+      ? JSON.parse(localStorage.getItem("sideBar"))
+      : windowWidth > 600
+      ? true
+      : false
+  );
+  const [darkMode, setDarkMode] = useState(
+    JSON.parse(localStorage.getItem("darkMode")) || false
+  );
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('darkMode', JSON.stringify(darkMode));
+    localStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
 
   useEffect(() => {
-    localStorage.setItem('sideBar', JSON.stringify(sidebarVisible));
+    localStorage.setItem("sideBar", JSON.stringify(sidebarVisible));
   }, [sidebarVisible]);
 
   useEffect(() => {
-    localStorage.setItem('chosenBoardId', JSON.stringify(chosenBoardId));
+    localStorage.setItem("chosenBoardId", JSON.stringify(chosenBoardId));
   }, [chosenBoardId]);
 
   useEffect(() => {
@@ -58,11 +66,16 @@ const App = () => {
       return;
     }
     getBoards(token);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chosenBoardId]);
 
+  const showAlert = (message, type) => {
+    setAlert({ message, type });
+    setTimeout(() => setAlert(null), 2000);
+  };
+
   const getBoards = async (token) => {
-    const response = await fetch(`https://task-manager-server-ashy.vercel.app/boards`, {
+    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/boards`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -73,7 +86,7 @@ const App = () => {
     if (response.ok) {
       const boards = await response.json();
       setBoards(boards);
-      setChosenBoardId(chosenBoardId ? chosenBoardId : boards[0].id)
+      setChosenBoardId(chosenBoardId ? chosenBoardId : boards[0].id);
     } else {
       console.log("Error getting boards:", response.status);
     }
@@ -81,7 +94,7 @@ const App = () => {
 
   const getUser = async (token) => {
     try {
-      const response = await fetch(`https://task-manager-server-ashy.vercel.app/users`, {
+      const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/users`, {
         method: "GET",
         headers: {
           Authorization: `${token}`,
@@ -97,7 +110,7 @@ const App = () => {
 
   // const updateUser = async (id, userData, token) => {
   //   try {
-  //     const response = await fetch(`/users/${id}`, {
+  //     const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/users/${id}`, {
   //       method: "PUT",
   //       headers: {
   //         Authorization: `${token}`,
@@ -114,7 +127,7 @@ const App = () => {
 
   // const deleteUser = async (id, token) => {
   //   try {
-  //     await fetch(`/users/${id}`, {
+  //     await fetch(`${import.meta.env.VITE_SOME_SERVER}/users/${id}`, {
   //       method: "DELETE",
   //       headers: {
   //         Authorization: `${token}`,
@@ -131,11 +144,13 @@ const App = () => {
     <main>
       <Router>
         <RouteProvider>
+              {alert && <Alert message={alert.message} type={alert.type} />}
           <Routes>
             <Route
               path="/"
               element={
                 <Dashboard
+                  showAlert={showAlert}
                   isOpen={isOpen}
                   darkMode={darkMode}
                   setDarkMode={setDarkMode}
@@ -167,6 +182,7 @@ const App = () => {
                   setChosenBoardId={setChosenBoardId}
                   user={user}
                   boards={boards}
+                  showAlert={showAlert}
                 />
               }
             />
@@ -174,8 +190,7 @@ const App = () => {
               path="/login"
               element={
                 <LoginPage
-                  showPassword={showPassword}
-                  setShowPassword={setShowPassword}
+                  showAlert={showAlert}
                 />
               }
             />

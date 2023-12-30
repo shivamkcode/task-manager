@@ -7,14 +7,13 @@ import EyeIcon from "../assets/icon-show-sidebar.svg";
 import Cross from "../assets/icon-cross.svg";
 
 // eslint-disable-next-line react/prop-types
-const SignupPage = ({ isOpen, hideSignup, showPassword, setShowPassword }) => {
+const SignupPage = ({ isOpen, hideSignup, showPassword, setShowPassword, showAlert }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
 
   const handleSignup = async () => {
-    const response = await fetch("https://task-manager-server-ashy.vercel.app/signup", {
+    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -25,10 +24,10 @@ const SignupPage = ({ isOpen, hideSignup, showPassword, setShowPassword }) => {
     if (response.ok) {
       const data = await response.json();
       localStorage.setItem("token", data.token);
-      setMessage("Signup successful!");
+      showAlert("Signup successful!", 'success');
       hideSignup();
     } else {
-      setMessage("Signup failed.");
+      showAlert("Signup failed.", 'error');
     }
   };
 
@@ -69,7 +68,6 @@ const SignupPage = ({ isOpen, hideSignup, showPassword, setShowPassword }) => {
       <Button onClick={handleSignup} disabled={!username || !password}>
         Signup
       </Button>
-      <p>{message}</p>
     </Card>
   );
 };

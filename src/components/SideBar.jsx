@@ -18,6 +18,7 @@ const SideBar = ({
   windowWidth,
   darkMode,
   setDarkMode,
+  userName,
 }) => {
   const toggle = () => {
     let r = document.querySelector(":root");
@@ -76,7 +77,7 @@ const SideBar = ({
           </div>
           <div
             onClick={() => setIsOpen({ addBoard: true })}
-            style={{ color: "#635FC7" }}
+            style={{ color: "#635FC7", opacity:`${!userName ? '1' : '0'}` }}
             className="board-name add-board"
           >
             <img

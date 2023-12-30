@@ -18,6 +18,7 @@ const Dashboard = ({
   windowWidth,
   darkMode,
   setDarkMode,
+  showAlert,
 }) => {
   const [selectedColumns, setSelectedColumns] = useState([]);
 
@@ -53,6 +54,7 @@ const Dashboard = ({
       />
       <Board
         boardName={boards?.find((board) => board.id === chosenBoardId)?.name}
+        showAlert={showAlert}
         getBoards={getBoards}
         boards={boards}
         selectedColumns={selectedColumns}

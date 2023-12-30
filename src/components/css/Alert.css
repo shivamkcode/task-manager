@@ -1,0 +1,44 @@
+  @keyframes fadeInSlideDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-50%);
+    }
+    100% {
+      opacity: 0.7;
+      transform: translateY(30px);
+    }
+  }
+  
+  .alert {
+    display: flex;
+    position: fixed;
+    top: 50px;
+    left: 40%;
+    text-align: center;
+    height: auto;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    animation: fadeInSlideDown 0.5s ease forwards;
+    z-index: 1000;
+  }
+  
+  .alert-success {
+    background-color: #4CAF50;
+  }
+  
+  .alert-error {
+    background-color: #f44336;
+  }
+  .alert-icon{
+    margin-right: 10px;
+    border: 1px solid white;
+    border-radius: 20px;
+    padding: 3px;
+  }
+  
+  @media screen and (max-width: 600px) {
+    .alert{
+        left: 28%;
+    }
+  }

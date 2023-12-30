@@ -6,7 +6,7 @@ import Input from "./Input";
 import { useEffect, useState } from "react";
 
 // eslint-disable-next-line react/prop-types
-const BoardForm = ({ showForm, selectedBoard, mode, getBoards, darkMode }) => {
+const BoardForm = ({ showForm, selectedBoard, mode, getBoards, darkMode, showAlert }) => {
   const [boardName, setBoardName] = useState(mode ? selectedBoard.name : "");
   const [boardColumns, setBoardColumns] = useState([
     { status: "TODO" },
@@ -22,7 +22,7 @@ const BoardForm = ({ showForm, selectedBoard, mode, getBoards, darkMode }) => {
   }, [mode, selectedBoard]);
 
   const addNewBoard = async (name, token, columns) => {
-    const response = await fetch("https://task-manager-server-ashy.vercel.app/boards", {
+    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/boards`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,15 +32,15 @@ const BoardForm = ({ showForm, selectedBoard, mode, getBoards, darkMode }) => {
     });
 
     if (response.ok) {
-      const board = await response.json();
-      console.log("Board created:", board);
+      // const board = await response.json();
+      showAlert("Board created successfully", 'success');
     } else {
-      console.log("Error creating board:", response.status);
+      showAlert("Error creating board", 'error');
     }
   };
 
   const updateBoard = async ( id, name, token, columns) => {
-    const response = await fetch(`https://task-manager-server-ashy.vercel.app/boards/${id}`, {
+    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/boards/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

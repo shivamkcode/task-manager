@@ -22,7 +22,8 @@ const Board = ({
   sidebarVisible,
   getUser,
   windowWidth,
-  darkMode
+  darkMode,
+  showAlert,
 }) => {
   const [taskDetails, setTaskDetails] = useState(false);
   const [showTaskEditOption, setShowTaskEditOption] = useState(false);
@@ -44,7 +45,7 @@ const Board = ({
   }, []);
 
   const updateTask = async (id, title, description, status, subTasks) => {
-    const response = await fetch(`https://task-manager-server-ashy.vercel.app/tasks/${id}`, {
+    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/tasks/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -52,10 +53,10 @@ const Board = ({
       body: JSON.stringify({ title, description, status, subTasks }),
     });
     if (response.ok) {
-      const task = await response.json();
-      console.log("Task updated:", task);
+      // const task = await response.json();
+      showAlert("Task updated successfully", "success");
     } else {
-      console.log("Error updating task:", response.status);
+      showAlert("Error updating task", "error");
     }
   };
 
@@ -332,22 +333,35 @@ const Board = ({
           </div>
         </div>
       )}
-      {sidebarVisible && windowWidth < 600 && (<div
-        style={{
-          position: "absolute",
-          top: '80px',
-          left: 0,
-          width: "100vw",
-          height: "calc(100vh - 90px)",
-          backgroundColor: "rgba(0,0,0,0.5)",
-          zIndex: "999",
-        }}
-      />)}
+      {sidebarVisible && windowWidth < 600 && (
+        <div
+          style={{
+            position: "absolute",
+            top: "80px",
+            left: 0,
+            width: "100vw",
+            height: "calc(100vh - 90px)",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            zIndex: "999",
+          }}
+        />
+      )}
       {isOpen.addBoard && (
         <BoardForm
+          showAlert={showAlert}
           getBoards={getBoards}
           showForm={() => setIsOpen({ addBoard: false })}
           darkMode={darkMode}
+        />
+      )}
+      {isOpen.editBoardForm && (
+        <BoardForm
+          selectedBoard={boards?.find((board) => board.id === boardId)}
+          mode="edit"
+          showForm={() => setIsOpen({ editBoardForm: false })}
+          getBoards={getBoards}
+          darkMode={darkMode}
+          showAlert={showAlert}
         />
       )}
       {selectedColumns.length === 0 && (
@@ -360,6 +374,7 @@ const Board = ({
       )}
       {isOpen.showTaskForm && (
         <TaskForm
+          showAlert={showAlert}
           selectedColumns={selectedColumns}
           getBoards={getBoards}
           boardId={boardId}
@@ -370,6 +385,7 @@ const Board = ({
       )}
       {showTaskEditForm && (
         <TaskForm
+          showAlert={showAlert}
           updateTask={updateTask}
           showForm={setShowTaskEditForm}
           boardId={boardId}
@@ -383,6 +399,7 @@ const Board = ({
       )}
       {showTaskDeleteForm && (
         <DeleteConfirm
+          showAlert={showAlert}
           text="task"
           getBoards={getBoards}
           name={selectedTask.title}
@@ -393,17 +410,9 @@ const Board = ({
           }}
         />
       )}
-      {isOpen.editBoardForm && (
-        <BoardForm
-          selectedBoard={boards?.find((board) => board.id === boardId)}
-          mode="edit"
-          showForm={() => setIsOpen({ editBoardForm: false })}
-          getBoards={getBoards}
-          darkMode={darkMode}
-        />
-      )}
       {isOpen.deleteBoardForm && (
         <DeleteConfirm
+          showAlert={showAlert}
           text="board"
           name={boardName}
           setChosenBoardId={setChosenBoardId}

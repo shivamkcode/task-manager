@@ -8,15 +8,15 @@ import EyeIcon from "../assets/icon-show-sidebar.svg";
 import SignupPage from "./signUp";
 
 // eslint-disable-next-line react/prop-types
-const LoginPage = ({ isOpen, showPassword, setShowPassword }) => {
+const LoginPage = ({ isOpen,showAlert }) => {
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const [showSignup, setShowSignup] = useState(false);
 
   const handleLogin = async () => {
-    const response = await fetch("https://task-manager-server-ashy.vercel.app/login", {
+    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -27,10 +27,10 @@ const LoginPage = ({ isOpen, showPassword, setShowPassword }) => {
     if (response.ok) {
       const data = await response.json();
       localStorage.setItem("token", data.token);
-      setMessage("Login successful!");
+      showAlert('Logged in successfully!', 'success')
       navigate("/");
     } else {
-      setMessage("Login failed.");
+      showAlert('Login failed.','error' );
     }
   };
 
@@ -67,7 +67,6 @@ const LoginPage = ({ isOpen, showPassword, setShowPassword }) => {
           <Button disabled={!email || !password} onClick={() => handleLogin()}>
             Login
           </Button>
-          <p>{message}</p>
           <Button onClick={() => setShowSignup(true)}>
             Create New Account
           </Button>
@@ -75,6 +74,7 @@ const LoginPage = ({ isOpen, showPassword, setShowPassword }) => {
       </Card>
       {showSignup && (
         <SignupPage
+          showAlert={showAlert}
           hideSignup={() => setShowSignup(false)}
           showPassword={showPassword}
           setShowPassword={setShowPassword}
