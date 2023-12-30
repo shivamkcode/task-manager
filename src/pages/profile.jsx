@@ -74,7 +74,7 @@ const Profile = ({
   };
 
   const recievedInvite = async (userId) => {
-    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/invites/${userId}`, {
+    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/invites/recieved/${userId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
