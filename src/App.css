@@ -450,3 +450,15 @@ select:hover{
     margin: 0;
   }
 }
+@media screen and (max-width: 400px) {
+  .nav h2, .nav h1{
+    margin: 0;
+    padding: 0;
+  }
+  .nav h1{
+    font-size: 6vw;
+  }
+  .nav img{
+    margin-left: 0;
+  }
+}

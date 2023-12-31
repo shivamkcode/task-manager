@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import Card from "../components/Card";
 import Button from "../components/Button";
@@ -6,11 +7,19 @@ import Eye from "../assets/icon-hide-sidebar.svg";
 import EyeIcon from "../assets/icon-show-sidebar.svg";
 import Cross from "../assets/icon-cross.svg";
 
-// eslint-disable-next-line react/prop-types
-const SignupPage = ({ isOpen, hideSignup, showPassword, setShowPassword, showAlert }) => {
+const SignupPage = ({
+  isOpen,
+  hideSignup,
+  showPassword,
+  setShowPassword,
+  showAlert,
+  email,
+  setEmail,
+  emailError,
+  handleEmailBlur
+}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
 
   const handleSignup = async () => {
     const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/signup`, {
@@ -24,10 +33,10 @@ const SignupPage = ({ isOpen, hideSignup, showPassword, setShowPassword, showAle
     if (response.ok) {
       const data = await response.json();
       localStorage.setItem("token", data.token);
-      showAlert("Signup successful!", 'success');
+      showAlert("Signup successful!", "success");
       hideSignup();
     } else {
-      showAlert("Signup failed.", 'error');
+      showAlert("Signup failed.", "error");
     }
   };
 
@@ -45,12 +54,13 @@ const SignupPage = ({ isOpen, hideSignup, showPassword, setShowPassword, showAle
         onChange={(e) => setUsername(e.target.value)}
       />
       <Input
-        type={"email"}
-        placeholder={"Email"}
-        value={email}
-        capital={false}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+              type={"email"}
+              placeholder={"email"}
+              value={email}
+              capital={false}
+              onChange={(e) => setEmail(e.target.value)}
+              onBlur={handleEmailBlur}
+            />
       <div className="passwordInput">
         <Input
           type={showPassword ? "text" : "password"}
@@ -65,7 +75,7 @@ const SignupPage = ({ isOpen, hideSignup, showPassword, setShowPassword, showAle
           alt="eye"
         />
       </div>
-      <Button onClick={handleSignup} disabled={!username || !password}>
+      <Button onClick={handleSignup} disabled={!username || !password || emailError === 'error'}>
         Signup
       </Button>
     </Card>

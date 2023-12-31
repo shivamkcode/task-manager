@@ -7,6 +7,7 @@ const Input = ({
   placeholder,
   capital = true,
   className,
+  onBlur,
 }) => {
   const style = {
     width: "100%",
@@ -25,6 +26,7 @@ const Input = ({
   return (
     <input
       className={className}
+      onBlur={onBlur}
       style={style}
       type={type}
       value={capital ? capitalize(value) : value}

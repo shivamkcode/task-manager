@@ -97,6 +97,7 @@ const SideBar = ({
               <label className="switch">
                 <input
                   type="checkbox"
+                  checked={darkMode}
                   onClick={() => {
                     setDarkMode(!darkMode);
 

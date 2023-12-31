@@ -8,9 +8,10 @@ import EyeIcon from "../assets/icon-show-sidebar.svg";
 import SignupPage from "./signUp";
 
 // eslint-disable-next-line react/prop-types
-const LoginPage = ({ isOpen,showAlert }) => {
+const LoginPage = ({ isOpen, showAlert }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState(null);
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [showSignup, setShowSignup] = useState(false);
@@ -27,12 +28,26 @@ const LoginPage = ({ isOpen,showAlert }) => {
     if (response.ok) {
       const data = await response.json();
       localStorage.setItem("token", data.token);
-      showAlert('Logged in successfully!', 'success')
+      showAlert("Logged in successfully!", "success");
       navigate("/");
     } else {
-      showAlert('Login failed.','error' );
+      const errorData = await response.json();
+    showAlert(errorData.message, "error");
     }
   };
+
+  const isValidEmail = (email) => {
+    return /\S+@\S+\.\S+/.test(email);
+  };
+
+  const handleEmailBlur = (e) => {
+    if (!isValidEmail(e.target.value)) {
+        setEmailError('error')
+        showAlert('Please enter a valid email', 'error');
+    } else {
+        setEmailError(null);
+    }
+};
 
   return (
     <div className="login-page">
@@ -42,13 +57,14 @@ const LoginPage = ({ isOpen,showAlert }) => {
       <Card isOpen={!isOpen}>
         <div>
           <h1>Login</h1>
-          <Input
-            type={"email"}
-            placeholder={"email"}
-            value={email}
-            capital={false}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+            <Input
+              type={"email"}
+              placeholder={"email"}
+              value={email}
+              capital={false}
+              onChange={(e) => setEmail(e.target.value)}
+              onBlur={handleEmailBlur}
+            />
           <div className="passwordInput">
             <Input
               type={showPassword ? "text" : "password"}
@@ -64,7 +80,7 @@ const LoginPage = ({ isOpen,showAlert }) => {
               alt="eye"
             />
           </div>
-          <Button disabled={!email || !password} onClick={() => handleLogin()}>
+          <Button disabled={!email || !password || emailError === 'error'} onClick={() => handleLogin()}>
             Login
           </Button>
           <Button onClick={() => setShowSignup(true)}>
@@ -74,12 +90,16 @@ const LoginPage = ({ isOpen,showAlert }) => {
       </Card>
       {showSignup && (
         <SignupPage
+          email={email}
+          setEmail={setEmail}
+          handleEmailBlur={handleEmailBlur}
+          emailError={emailError}
           showAlert={showAlert}
           hideSignup={() => setShowSignup(false)}
           showPassword={showPassword}
           setShowPassword={setShowPassword}
         />
-        )}
+      )}
     </div>
   );
 };

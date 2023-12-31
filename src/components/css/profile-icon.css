@@ -68,3 +68,8 @@
   .profile-icon[data-initial="Y"] { background-color: #46f0f0; color: #000; }
   .profile-icon[data-initial="Z"] { background-color: #f032e6; color: #fff; }
   
+  @media screen and (max-width: 400px) {
+    .profile-icon{
+      margin: 0;
+    }
+  }

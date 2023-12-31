@@ -35,7 +35,7 @@ const NavBar = ({
           <h1>TaskTracker</h1>
         </>
       )}
-      <h2>{boardName}</h2>
+      <h2>{windowWidth < 400 ? boardName?.split(' ')[0] : boardName}</h2>
       {windowWidth < 600 && (
         <img style={{marginLeft:'20px', width:'15px', marginRight:'auto'}} onClick={() => setSidebarVisible(!sidebarVisible)} src={sidebarVisible ? Up : Down} alt="^" />
       )}
@@ -63,7 +63,7 @@ const NavBar = ({
           />
         </>
       )}
-      {!boards && <Button onClick={() => navigate("/")}>Dashboard</Button>}
+      {!boards && <Button onClick={() => navigate("/")}>{windowWidth < 600 ? '<<' : 'Dashboard'}</Button>}
       <div
         onClick={() => navigate("/profile")}
         className="profile-icon"
