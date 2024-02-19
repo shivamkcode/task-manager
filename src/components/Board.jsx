@@ -45,13 +45,16 @@ const Board = ({
   }, []);
 
   const updateTask = async (id, title, description, status, subTasks) => {
-    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/tasks/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title, description, status, subTasks }),
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_SOME_SERVER}/tasks/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, description, status, subTasks }),
+      }
+    );
     if (response.ok) {
       // const task = await response.json();
       showAlert("Task updated successfully", "success");
@@ -364,11 +367,19 @@ const Board = ({
           showAlert={showAlert}
         />
       )}
-      {selectedColumns.length === 0 && (
+      {selectedColumns.length === 0 && boards?.length > 0 && (
         <div className="empty-board">
           <p>This board is empty. Create a new column to get started.</p>
-          <Button onClick={() => setIsOpen({ addBoard: true })}>
+          <Button onClick={() => setIsOpen({ editBoardForm: true })}>
             +Create New Column
+          </Button>
+        </div>
+      )}
+      {boards?.length === 0 && (
+        <div className="empty-board">
+          <p>Create a new board to get started.</p>
+          <Button onClick={() => setIsOpen({ addBoard: true })}>
+            +Create New Board
           </Button>
         </div>
       )}
