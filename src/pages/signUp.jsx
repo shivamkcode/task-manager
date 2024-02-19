@@ -36,7 +36,8 @@ const SignupPage = ({
       showAlert("Signup successful!", "success");
       hideSignup();
     } else {
-      showAlert("Signup failed.", "error");
+      const errorData = await response.json();
+      showAlert(errorData.message, "error");
     }
   };
 
@@ -69,13 +70,14 @@ const SignupPage = ({
           capital={false}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <img
+        <img 
+          className="eye"
           onClick={() => setShowPassword(!showPassword)}
           src={showPassword ? EyeIcon : Eye}
           alt="eye"
         />
       </div>
-      <Button onClick={handleSignup} disabled={!username || !password || emailError === 'error'}>
+      <Button onClick={handleSignup} disabled={!username || password.length < 6 || emailError === 'error'}>
         Signup
       </Button>
     </Card>

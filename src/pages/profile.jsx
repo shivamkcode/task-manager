@@ -41,13 +41,11 @@ const Profile = ({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // Authorization: `${token}`,
       },
       body: JSON.stringify({ inviterId, inviteeEmail, boardId }),
     });
 
     if (response.ok) {
-      // const invite = await response.json();
       showAlert("Invite Sent Successfully", 'success');
     } else {
       showAlert("Error inviting user", 'error');
@@ -78,7 +76,6 @@ const Profile = ({
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        // Authorization: `${token}`,
       },
     });
 
@@ -203,7 +200,7 @@ const Profile = ({
             <h3>{user?.username}</h3>
             <p>email:</p>
             <h4>{user?.email}</h4>
-            <Button>Update Profile</Button>
+            <Button disabled>Update Profile</Button>
             <Button onClick={handleLogout} color="#EA5555" textColor="white">
               Logout
             </Button>

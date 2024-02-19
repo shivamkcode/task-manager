@@ -26,7 +26,7 @@ const Input = ({
   return (
     <input
       className={className}
-      onBlur={onBlur}
+      onBlur={type === 'email'? onBlur: undefined}
       style={style}
       type={type}
       value={capital ? capitalize(value) : value}

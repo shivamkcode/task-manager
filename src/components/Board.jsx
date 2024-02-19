@@ -367,7 +367,7 @@ const Board = ({
       {selectedColumns.length === 0 && (
         <div className="empty-board">
           <p>This board is empty. Create a new column to get started.</p>
-          <Button onClick={() => setIsOpen({ editBoardForm: true })}>
+          <Button onClick={() => setIsOpen({ addBoard: true })}>
             +Create New Column
           </Button>
         </div>

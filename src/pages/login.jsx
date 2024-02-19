@@ -81,7 +81,7 @@ const LoginPage = ({ isOpen, showAlert }) => {
             />
           </div>
           <Button
-            disabled={!email || !password || emailError === "error"}
+            disabled={!email || password.length < 6 || emailError === "error"}
             onClick={() => handleLogin()}
           >
             Login
