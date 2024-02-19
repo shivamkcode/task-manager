@@ -32,7 +32,7 @@ const LoginPage = ({ isOpen, showAlert }) => {
       navigate("/");
     } else {
       const errorData = await response.json();
-    showAlert(errorData.message, "error");
+      showAlert(errorData.message, "error");
     }
   };
 
@@ -42,12 +42,12 @@ const LoginPage = ({ isOpen, showAlert }) => {
 
   const handleEmailBlur = (e) => {
     if (!isValidEmail(e.target.value)) {
-        setEmailError('error')
-        showAlert('Please enter a valid email', 'error');
+      setEmailError("error");
+      showAlert("Please enter a valid email", "error");
     } else {
-        setEmailError(null);
+      setEmailError(null);
     }
-};
+  };
 
   return (
     <div className="login-page">
@@ -57,14 +57,14 @@ const LoginPage = ({ isOpen, showAlert }) => {
       <Card isOpen={!isOpen}>
         <div>
           <h1>Login</h1>
-            <Input
-              type={"email"}
-              placeholder={"email"}
-              value={email}
-              capital={false}
-              onChange={(e) => setEmail(e.target.value)}
-              onBlur={handleEmailBlur}
-            />
+          <Input
+            type={"email"}
+            placeholder={"email"}
+            value={email}
+            capital={false}
+            onChange={(e) => setEmail(e.target.value)}
+            onBlur={handleEmailBlur}
+          />
           <div className="passwordInput">
             <Input
               type={showPassword ? "text" : "password"}
@@ -80,7 +80,10 @@ const LoginPage = ({ isOpen, showAlert }) => {
               alt="eye"
             />
           </div>
-          <Button disabled={!email || !password || emailError === 'error'} onClick={() => handleLogin()}>
+          <Button
+            disabled={!email || !password || emailError === "error"}
+            onClick={() => handleLogin()}
+          >
             Login
           </Button>
           <Button onClick={() => setShowSignup(true)}>

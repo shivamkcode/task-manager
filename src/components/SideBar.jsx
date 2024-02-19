@@ -98,9 +98,8 @@ const SideBar = ({
                 <input
                   type="checkbox"
                   checked={darkMode}
-                  onClick={() => {
+                  onChange={() => {
                     setDarkMode(!darkMode);
-
                     toggle();
                   }}
                 />

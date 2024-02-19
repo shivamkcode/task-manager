@@ -6,7 +6,7 @@ const Input = ({
   onChange,
   placeholder,
   capital = true,
-  className,
+  className, 
   onBlur,
 }) => {
   const style = {
