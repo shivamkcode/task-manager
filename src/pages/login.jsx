@@ -32,6 +32,7 @@ const LoginPage = ({ isOpen, showAlert }) => {
       navigate("/");
     } else {
       const errorData = await response.json();
+      setPassword("")
       showAlert(errorData.message, "error");
     }
   };

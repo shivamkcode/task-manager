@@ -79,7 +79,8 @@ aside {
   width: auto;
 }
 
-.card-header, .invite-header {
+.card-header,
+.invite-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -122,7 +123,8 @@ textarea::-webkit-scrollbar,
   margin-bottom: 3vh;
   margin-top: 2vh;
 }
-input:hover, textarea:hover{
+input:hover,
+textarea:hover {
   opacity: 0.9;
   scale: 0.99;
 }
@@ -358,7 +360,7 @@ select {
   color: var(--text-color);
   cursor: pointer;
 }
-select:hover{
+select:hover {
   opacity: 0.9;
   scale: 0.99;
 }
@@ -411,30 +413,31 @@ select:hover{
   margin-bottom: 1vh;
 }
 .cross:hover {
-  filter: invert(48%) sepia(80%) saturate(8000%) hue-rotate(340deg) brightness(100%) contrast(100%);
+  filter: invert(48%) sepia(80%) saturate(8000%) hue-rotate(340deg)
+    brightness(100%) contrast(100%);
 }
-
 
 @media screen and (max-width: 768px) {
   .container {
     grid-template-rows: 80px 1fr;
     grid-template-columns: 250px 1fr;
   }
-  .board{
+  .board {
     height: calc(100vh - 80px);
   }
-  .invite-box-container, .invite-header{
+  .invite-box-container,
+  .invite-header {
     flex-direction: column;
     gap: 0;
   }
-  .invite-container h1{
+  .invite-container h1 {
     font-size: 3vw;
     margin-bottom: 20px;
   }
-  .invite-container h3{
+  .invite-container h3 {
     font-size: 2.5vw;
   }
-  .invite-box{
+  .invite-box {
     width: 100%;
   }
 }
@@ -443,22 +446,24 @@ select:hover{
   .container {
     display: block;
   }
-  .board{
+  .board {
     height: calc(100vh - 80px);
   }
-  .nav h2, .nav h1{
+  .nav h2,
+  .nav h1 {
     margin: 0;
   }
 }
 @media screen and (max-width: 400px) {
-  .nav h2, .nav h1{
+  .nav h2,
+  .nav h1 {
     margin: 0;
     padding: 0;
   }
-  .nav h1{
+  .nav h1 {
     font-size: 6vw;
   }
-  .nav img{
+  .nav img {
     margin-left: 0;
   }
 }

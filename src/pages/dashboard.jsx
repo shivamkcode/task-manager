@@ -19,6 +19,7 @@ const Dashboard = ({
   darkMode,
   setDarkMode,
   showAlert,
+  updateUser,
 }) => {
   const [selectedColumns, setSelectedColumns] = useState([]);
 
@@ -66,6 +67,7 @@ const Dashboard = ({
         getUser={getUser}
         windowWidth={windowWidth}
         darkMode={darkMode}
+        updateUser={updateUser}
       />
     </main>
   );

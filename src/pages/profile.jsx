@@ -1,6 +1,4 @@
 /* eslint-disable react/prop-types */
-// import mailgun from 'mailgun-js'
-
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import SideBar from "../components/SideBar";
@@ -10,6 +8,7 @@ import Card from "../components/Card";
 import Input from "../components/Input";
 import Cross from "../assets/icon-cross.svg";
 import Invite from "../components/Invite";
+import UpdateProfileForm from "../components/UpdateProfileForm";
 
 const Profile = ({
   user,
@@ -24,6 +23,9 @@ const Profile = ({
   setChosenBoardId,
   windowWidth,
   showAlert,
+  getUser,
+  updateUser,
+  deleteUser
 }) => {
   const [inviteForm, setInviteForm] = useState(false);
   const [emailInput, setEmailInput] = useState({
@@ -33,6 +35,7 @@ const Profile = ({
   const [boardId, setBoardId] = useState();
   const [sentInvites, setSentInvites] = useState();
   const [recievedInvites, setRecievedInvites] = useState();
+  const [showUpdateProfileForm, setShowUpdateProfileForm] = useState(false);
   const navigate = useNavigate();
   const userInitial = user ? user.username[0].toUpperCase() : "";
 
@@ -185,7 +188,7 @@ const Profile = ({
                 {recievedInvites?.length === 0 && (
                   <p>No invites recieved.....</p>
                 )}
-              </div>
+              </div> 
             </div>
           </div>
           <div className="profile">
@@ -200,7 +203,9 @@ const Profile = ({
             <h3>{user?.username}</h3>
             <p>email:</p>
             <h4>{user?.email}</h4>
-            <Button disabled>Update Profile</Button>
+            <Button
+             onClick={() => setShowUpdateProfileForm(true)}
+             >Update Profile</Button>
             <Button onClick={handleLogout} color="#EA5555" textColor="white">
               Logout
             </Button>
@@ -276,6 +281,18 @@ const Profile = ({
           zIndex: "999",
         }}
       />)}
+      {showUpdateProfileForm && (
+        <UpdateProfileForm 
+        darkMode={darkMode}
+        setShowUpdateProfileForm={setShowUpdateProfileForm}
+        user={user}
+        getUser={getUser}
+        updateUser={updateUser}
+        deleteUser={deleteUser}
+        showAlert={showAlert}
+        handleLogout={handleLogout}
+        />
+      )}
     </>
   );
 };

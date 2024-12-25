@@ -7,6 +7,7 @@ import LightThemeIcon from "../assets/icon-light-theme.svg";
 import EyeIcon from "../assets/icon-show-sidebar.svg";
 import HideEyeIcon from "../assets/icon-hide-sidebar.svg";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SideBar = ({
   setIsOpen,
@@ -20,6 +21,7 @@ const SideBar = ({
   setDarkMode,
   userName,
 }) => {
+  const navigate = useNavigate()
   const toggle = () => {
     let r = document.querySelector(":root");
     if (!darkMode) {
@@ -52,7 +54,7 @@ const SideBar = ({
       {sidebarVisible && (
         <aside>
           {windowWidth > 600 && (
-            <div className="logo-container">
+            <div style={{cursor: "pointer"}} className="logo-container" onClick={() => navigate("/")}>
               <div className="logo" />
               <h1>TaskTracker</h1>
             </div>
@@ -93,7 +95,10 @@ const SideBar = ({
 
           <div className="modeSelect">
             <div className="mode-change">
-              <img src={LightThemeIcon} alt="theme" />
+              <img src={LightThemeIcon} onClick={() => {
+                    setDarkMode(false);
+                    toggle();
+                  }} alt="theme" />
               <label className="switch">
                 <input
                   type="checkbox"
@@ -105,7 +110,10 @@ const SideBar = ({
                 />
                 <span className="slider round"></span>
               </label>
-              <img src={DarkThemeIcon} alt="moon" />
+              <img src={DarkThemeIcon} onClick={() => {
+                    setDarkMode(true);
+                    toggle();
+                  }} alt="moon" />
             </div>
             {windowWidth > 600 && (
               <div

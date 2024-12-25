@@ -9,40 +9,60 @@ const DeleteConfirm = ({
   id,
   getBoards,
   showAlert,
+  setChosenBoardId,
+  boards,
 }) => {
   const deleteBoard = async (id, token) => {
-    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/boards/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `${token}`,
-      },
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_SOME_SERVER}/boards/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
+    );
     if (response.ok) {
-      showAlert("Board and all its tasks are deleted successfully", 'success');
+      showAlert("Board and all its tasks are deleted successfully", "success");
     } else {
-      showAlert("Error deleting the board:", 'error');
+      showAlert("Error deleting the board:", "error");
     }
   };
 
   const deleteTask = async (id, token) => {
-    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/tasks/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `${token}`,
-      },
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_SOME_SERVER}/tasks/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
+    );
     if (response.ok) {
-      showAlert("Task deleted successfully", 'success');
+      showAlert("Task deleted successfully", "success");
     } else {
-      showAlert("Error deleting the task:", 'error');
+      showAlert("Error deleting the task:", "error");
     }
   };
 
   const handleDelete = async () => {
     const token = localStorage.getItem("token");
+    const currentIndex = boards.findIndex((board) => board.id === id);
+    console.log(currentIndex);
     if (text === "board") {
       await deleteBoard(id, token);
       getBoards(token);
+      if (currentIndex !== -1) {
+        if (currentIndex > 0) {
+          setChosenBoardId(boards[currentIndex - 1].id);
+        } else if (currentIndex < boards.length - 1) {
+          setChosenBoardId(boards[currentIndex + 1].id);
+        } else {
+          setChosenBoardId(null);
+        }
+      }
+      console.log(id)
     } else {
       await deleteTask(id, token);
       getBoards(token);

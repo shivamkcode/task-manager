@@ -8,6 +8,7 @@ import Checkbox from "./Checkbox";
 import TaskForm from "./TaskForm";
 import DeleteConfirm from "./DeleteConfirm";
 import BoardForm from "./BoardForm";
+import sampleData from "../data.json";
 
 // eslint-disable-next-line react/prop-types
 const Board = ({
@@ -24,6 +25,7 @@ const Board = ({
   windowWidth,
   darkMode,
   showAlert,
+  updateUser
 }) => {
   const [taskDetails, setTaskDetails] = useState(false);
   const [showTaskEditOption, setShowTaskEditOption] = useState(false);
@@ -39,10 +41,99 @@ const Board = ({
     if (!token) {
       return;
     }
-    getBoards(token);
     getUser(token);
+    checkAndCreateSampleBoard(token);
+    getBoards(token);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const checkAndCreateSampleBoard = async (token) => {
+    const user = await getUser(token);
+    if (!user.sampleBoardsCreated) {
+      const response = await fetch(
+        `${import.meta.env.VITE_SOME_SERVER}/boards`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+        }
+      );
+      const boards = await response.json();
+      sampleData.sampleData.forEach(async (sampleBoard) => {
+        const sampleBoardExists = boards.some(
+          (board) => board.name === sampleBoard.name
+        );
+        if (!sampleBoardExists) {
+          const createdBoard = await addNewBoard(
+            sampleBoard.name,
+            token,
+            sampleBoard.columns
+          );
+          await addSampleTasks(createdBoard.id, token, sampleBoard.columns);
+        }
+      });
+      await updateUser(user.id, {sampleBoardsCreated: true}, token);
+    }
+  };
+
+  const addNewBoard = async (name, token, columns) => {
+    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/boards`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+      body: JSON.stringify({ name, columns }),
+    });
+
+    if (response.ok) {
+      const board = await response.json();
+      showAlert("Board created successfully", "success");
+      getBoards(token);
+      return board;
+    } else {
+      showAlert("Error creating board", "error");
+    }
+  };
+
+  const addSampleTasks = async (boardId, token, columns) => {
+    for (const column of columns) {
+      for (const task of column.tasks) {
+        await addNewTask(
+          task.title,
+          task.description,
+          column.status,
+          boardId,
+          task.subtasks,
+          token
+        );
+      }
+    }
+  };
+
+  const addNewTask = async (
+    title,
+    description,
+    status,
+    boardId,
+    subTasks,
+    token
+  ) => {
+    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/tasks`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+      body: JSON.stringify({ title, description, status, boardId, subTasks }),
+    });
+    if (response.ok) {
+      showAlert("Task created successfully", "success");
+    } else {
+      showAlert("Error creating task", "error");
+    }
+  };
 
   const updateTask = async (id, title, description, status, subTasks) => {
     const response = await fetch(
@@ -355,6 +446,8 @@ const Board = ({
           getBoards={getBoards}
           showForm={() => setIsOpen({ addBoard: false })}
           darkMode={darkMode}
+          id={boardId}
+          setChosenBoardId={setChosenBoardId}
         />
       )}
       {isOpen.editBoardForm && (
@@ -430,6 +523,7 @@ const Board = ({
           id={boardId}
           getBoards={getBoards}
           hideForm={() => setIsOpen({ deleteBoardForm: false })}
+          boards={boards}
         />
       )}
       {isOpen.showEditBoard && (

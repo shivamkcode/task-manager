@@ -85,8 +85,10 @@ const App = () => {
 
     if (response.ok) {
       const boards = await response.json();
-      setBoards(boards);
-      setChosenBoardId(chosenBoardId ? chosenBoardId : boards[0].id);
+      if (boards.length > 0) {
+        setBoards(boards);
+        // setChosenBoardId(chosenBoardId ? chosenBoardId : boards[0].id);
+      }
     } else {
       console.log("Error getting boards:", response.status);
     }
@@ -94,57 +96,61 @@ const App = () => {
 
   const getUser = async (token) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/users`, {
-        method: "GET",
-        headers: {
-          Authorization: `${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_SOME_SERVER}/users`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const user = await response.json();
       setUser(user);
+      return user
     } catch (error) {
       console.error(error);
     }
   };
 
-  // const updateUser = async (id, userData, token) => {
-  //   try {
-  //     const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/users/${id}`, {
-  //       method: "PUT",
-  //       headers: {
-  //         Authorization: `${token}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(userData),
-  //     });
-  //     const data = await response.json();
-  //     return data;
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+  const updateUser = async (id, userData, token) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/users/${id}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      showAlert(error, 'error');
+    }
+  };
 
-  // const deleteUser = async (id, token) => {
-  //   try {
-  //     await fetch(`${import.meta.env.VITE_SOME_SERVER}/users/${id}`, {
-  //       method: "DELETE",
-  //       headers: {
-  //         Authorization: `${token}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-  //     console.log("User deleted");
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+  const deleteUser = async (id, token) => {
+    try {
+      await fetch(`${import.meta.env.VITE_SOME_SERVER}/users/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("User deleted");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <main>
       <Router>
         <RouteProvider>
-              {alert && <Alert message={alert.message} type={alert.type} />}
+          {alert && <Alert message={alert.message} type={alert.type} />}
           <Routes>
             <Route
               path="/"
@@ -164,6 +170,7 @@ const App = () => {
                   boards={boards}
                   getUser={getUser}
                   windowWidth={windowWidth}
+                  updateUser={updateUser}
                 />
               }
             />
@@ -183,26 +190,16 @@ const App = () => {
                   user={user}
                   boards={boards}
                   showAlert={showAlert}
+                  getUser={getUser}
+                  updateUser={updateUser}
+                  deleteUser={deleteUser}
                 />
               }
             />
             <Route
               path="/login"
-              element={
-                <LoginPage
-                  showAlert={showAlert}
-                />
-              }
+              element={<LoginPage showAlert={showAlert} />}
             />
-            {/* <Route
-              path="/signup"
-              element={
-                <SignupPage
-                  showPassword={showPassword}
-                  setShowPassword={setShowPassword}
-                />
-              }
-            /> */}
           </Routes>
         </RouteProvider>
       </Router>

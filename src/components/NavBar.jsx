@@ -24,16 +24,16 @@ const NavBar = ({
   return (
     <nav className={`nav ${sidebarVisible ? "" : "noSideBar-nav"}`}>
       {windowWidth < 600 && (
-        <div className="card-header">
+        <div style={{cursor: "pointer"}} className="card-header" onClick={() => navigate("/")}>
           <img style={{marginRight: '20px'}} src={Logo} alt="logo" />
           {!boardName && <h1>TaskTracker</h1>}
         </div>
       )}
       {windowWidth > 600 && !sidebarVisible && (
-        <>
+        <div style={{cursor: "pointer"}} className="card-header" onClick={() => navigate("/")}>
           <div className="logo" />
           <h1>TaskTracker</h1>
-        </>
+        </div>
       )}
       <h2>{windowWidth < 400 ? boardName?.split(' ')[0] : boardName}</h2>
       {windowWidth < 600 && (
