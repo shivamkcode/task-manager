@@ -12,6 +12,7 @@ const LoginPage = ({ isOpen, showAlert }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [showSignup, setShowSignup] = useState(false);
@@ -32,13 +33,13 @@ const LoginPage = ({ isOpen, showAlert }) => {
       navigate("/");
     } else {
       const errorData = await response.json();
-      setPassword("")
+      setPassword("");
       showAlert(errorData.message, "error");
     }
   };
 
   const isValidEmail = (email) => {
-    return /\S+@\S+\.\S+/.test(email);
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
   const handleEmailBlur = (e) => {
@@ -47,6 +48,21 @@ const LoginPage = ({ isOpen, showAlert }) => {
       showAlert("Please enter a valid email", "error");
     } else {
       setEmailError(null);
+    }
+  };
+
+  const isValidPassword = (password) => {
+    return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password);
+  };
+  
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if (!isValidPassword(e.target.value)) {
+      const errorMsg =
+        "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one digit.";
+      setPasswordError(errorMsg);
+    } else {
+      setPasswordError(null);
     }
   };
 
@@ -72,7 +88,7 @@ const LoginPage = ({ isOpen, showAlert }) => {
               placeholder={"Password"}
               value={password}
               capital={false}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handlePasswordChange}
             />
             <img
               className="eye"
@@ -81,8 +97,9 @@ const LoginPage = ({ isOpen, showAlert }) => {
               alt="eye"
             />
           </div>
+          {passwordError && <p style={{ color: "#CD2C2C" }}>{passwordError}</p>}
           <Button
-            disabled={!email || password.length < 6 || emailError === "error"}
+            disabled={!email || passwordError || emailError}
             onClick={() => handleLogin()}
           >
             Login

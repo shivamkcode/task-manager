@@ -22,17 +22,18 @@ const UpdateProfileForm = ({
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState(null);
 
   const handleUpdate = async () => {
     const token = localStorage.getItem("token");
     if (!oldPassword) {
       await updateUser(user.id, { username: username }, token);
-      getUser(token)
+      getUser(token);
       showAlert("Username Changed", "success");
     } else if (oldPassword === newPassword) {
-      showAlert("Same as the old Password", "error");
+      showAlert("New Password can't be same as the Old Password", "error");
     } else if (newPassword !== confirmNewPassword) {
-      showAlert("Confirm new password", "error");
+      showAlert("New Passwords don't match", "error");
     } else {
       const data = await updateUser(
         user.id,
@@ -40,9 +41,24 @@ const UpdateProfileForm = ({
         token
       );
       if (data) {
-          handleLogout()
-          showAlert("Password Changed", "success");
+        handleLogout();
+        showAlert("Password Changed", "success");
       }
+    }
+  };
+
+  const isValidPassword = (password) => {
+    return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password);
+  };
+
+  const handlePasswordChange = (e) => {
+    setNewPassword(e.target.value);
+    if (!isValidPassword(e.target.value)) {
+      const errorMsg =
+        "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one digit.";
+      setPasswordError(errorMsg);
+    } else {
+      setPasswordError(null);
     }
   };
 
@@ -96,7 +112,7 @@ const UpdateProfileForm = ({
                 placeholder={"Password"}
                 value={newPassword}
                 capital={false}
-                onChange={(e) => setNewPassword(e.target.value)}
+                onChange={handlePasswordChange}
               />
               <img
                 className="eye"
@@ -105,6 +121,9 @@ const UpdateProfileForm = ({
                 alt="eye"
               />
             </div>
+            {passwordError && (
+              <p style={{ color: "#CD2C2C" }}>{passwordError}</p>
+            )}
           </label>
           <label>
             Confirm New Password
@@ -130,15 +149,15 @@ const UpdateProfileForm = ({
         <Button
           disabled={
             !username ||
-            username === user.username && !oldPassword ||
+            (username === user.username && !oldPassword) ||
             (oldPassword && (!newPassword || !confirmNewPassword)) ||
             (newPassword && (!oldPassword || !confirmNewPassword)) ||
             (confirmNewPassword && (!oldPassword || !newPassword))
           }
           onClick={() => {
-            handleUpdate()
-            setShowUpdateProfileForm(false)
-        }}
+            handleUpdate();
+            setShowUpdateProfileForm(false);
+          }}
         >
           Update Profile
         </Button>
