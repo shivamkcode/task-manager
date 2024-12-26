@@ -67,6 +67,7 @@ const SideBar = ({
                   key={i}
                   onClick={() => {
                     setChosenBoardId(board.id);
+                    windowWidth < 600 ? setSidebarVisible(false) : null
                   }}
                   className={`board-name ${
                     chosenBoardId === board.id ? "selected" : ""
@@ -97,7 +98,7 @@ const SideBar = ({
             <div className="mode-change">
               <img src={LightThemeIcon} onClick={() => {
                     setDarkMode(false);
-                    toggle();
+                    darkMode ? toggle() : null;
                   }} alt="theme" />
               <label className="switch">
                 <input
@@ -112,7 +113,7 @@ const SideBar = ({
               </label>
               <img src={DarkThemeIcon} onClick={() => {
                     setDarkMode(true);
-                    toggle();
+                    darkMode ? null : toggle();
                   }} alt="moon" />
             </div>
             {windowWidth > 600 && (

@@ -99,7 +99,7 @@ const LoginPage = ({ isOpen, showAlert }) => {
           </div>
           {passwordError && <p style={{ color: "#CD2C2C" }}>{passwordError}</p>}
           <Button
-            disabled={!email || passwordError || emailError}
+            disabled={!email || passwordError || emailError || !password}
             onClick={() => handleLogin()}
           >
             Login
@@ -113,8 +113,12 @@ const LoginPage = ({ isOpen, showAlert }) => {
         <SignupPage
           email={email}
           setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
           handleEmailBlur={handleEmailBlur}
+          handlePasswordChange={handlePasswordChange}
           emailError={emailError}
+          passwordError={passwordError}
           showAlert={showAlert}
           hideSignup={() => setShowSignup(false)}
           showPassword={showPassword}

@@ -60,7 +60,7 @@ aside {
   grid-area: 2 / 2;
   background: var(--secondary-color);
   height: calc(100vh - 100px);
-  padding: 3vh 0 0 3vh;
+  padding: 3vh;
   overflow-x: auto;
 }
 .board::-webkit-scrollbar {
@@ -439,6 +439,18 @@ select:hover {
   }
   .invite-box {
     width: 100%;
+  }
+  .profile-board {
+    flex-direction: column-reverse;
+    gap: 3vh;
+  }
+  .profile {
+    width: 100%;
+    margin: auto;
+  }
+  .invite-container {
+    width: 100%;
+    margin: auto;
   }
 }
 

@@ -15,11 +15,14 @@ const SignupPage = ({
   showAlert,
   email,
   setEmail,
+  password,
+  setPassword,
+  handlePasswordChange,
   emailError,
-  handleEmailBlur
+  passwordError,
+  handleEmailBlur,
 }) => {
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
 
   const handleSignup = async () => {
     const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/signup`, {
@@ -35,6 +38,8 @@ const SignupPage = ({
       localStorage.setItem("token", data.token);
       showAlert("Signup successful!", "success");
       hideSignup();
+      setUsername("")
+      setPassword("")
     } else {
       const errorData = await response.json();
       showAlert(errorData.message, "error");
@@ -55,30 +60,39 @@ const SignupPage = ({
         onChange={(e) => setUsername(e.target.value)}
       />
       <Input
-              type={"email"}
-              placeholder={"email"}
-              value={email}
-              capital={false}
-              onChange={(e) => setEmail(e.target.value)}
-              onBlur={handleEmailBlur}
-            />
+        type={"email"}
+        placeholder={"email"}
+        value={email}
+        capital={false}
+        onChange={(e) => setEmail(e.target.value)}
+        onBlur={handleEmailBlur}
+      />
       <div className="passwordInput">
         <Input
           type={showPassword ? "text" : "password"}
           placeholder={"Password"}
           value={password}
           capital={false}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={handlePasswordChange}
         />
-        <img 
+        <img
           className="eye"
           onClick={() => setShowPassword(!showPassword)}
           src={showPassword ? EyeIcon : Eye}
           alt="eye"
         />
       </div>
-      <Button onClick={handleSignup} disabled={!username || password.length < 6 || emailError === 'error'}>
+      {passwordError && <p style={{ color: "#CD2C2C" }}>{passwordError}</p>}
+      <Button
+        onClick={handleSignup}
+        disabled={!username || passwordError || emailError || !email || !password}
+      >
         Signup
+      </Button>
+      <Button
+        onClick={hideSignup}
+      >
+        Already have an account?
       </Button>
     </Card>
   );
