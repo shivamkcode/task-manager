@@ -108,7 +108,7 @@ const App = () => {
       );
       const user = await response.json();
       setUser(user);
-      return user
+      return user;
     } catch (error) {
       console.error(error);
     }
@@ -116,33 +116,41 @@ const App = () => {
 
   const updateUser = async (id, userData, token) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/users/${id}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_SOME_SERVER}/users/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        }
+      );
       const data = await response.json();
       return data;
     } catch (error) {
-      showAlert(error, 'error');
+      showAlert(error, "error");
     }
   };
 
   const deleteUser = async (id, token) => {
     try {
-      await fetch(`${import.meta.env.VITE_SOME_SERVER}/users/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      console.log("User deleted");
+      const response = await fetch(
+        `${import.meta.env.VITE_SOME_SERVER}/users/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.ok) {
+        showAlert("User deleted", "success");
+      }
     } catch (error) {
-      console.error(error);
+      showAlert(error, "error");
     }
   };
 

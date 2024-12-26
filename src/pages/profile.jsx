@@ -9,6 +9,7 @@ import Input from "../components/Input";
 import Cross from "../assets/icon-cross.svg";
 import Invite from "../components/Invite";
 import UpdateProfileForm from "../components/UpdateProfileForm";
+import DeleteConfirm from "../components/DeleteConfirm";
 
 const Profile = ({
   user,
@@ -25,7 +26,7 @@ const Profile = ({
   showAlert,
   getUser,
   updateUser,
-  deleteUser
+  deleteUser,
 }) => {
   const [inviteForm, setInviteForm] = useState(false);
   const [emailInput, setEmailInput] = useState({
@@ -38,20 +39,24 @@ const Profile = ({
   const [showUpdateProfileForm, setShowUpdateProfileForm] = useState(false);
   const navigate = useNavigate();
   const userInitial = user ? user.username[0].toUpperCase() : "";
+  const [showDeleteForm, setShowDeleteForm] = useState(false);
 
   const sendInvite = async (inviterId, inviteeEmail, boardId) => {
-    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/invites`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ inviterId, inviteeEmail, boardId }),
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_SOME_SERVER}/invites`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ inviterId, inviteeEmail, boardId }),
+      }
+    );
 
     if (response.ok) {
-      showAlert("Invite Sent Successfully", 'success');
+      showAlert("Invite Sent Successfully", "success");
     } else {
-      showAlert("Error inviting user", 'error');
+      showAlert("Error inviting user", "error");
     }
   };
 
@@ -75,12 +80,15 @@ const Profile = ({
   };
 
   const recievedInvite = async (userId) => {
-    const response = await fetch(`${import.meta.env.VITE_SOME_SERVER}/invites/recieved/${userId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_SOME_SERVER}/invites/recieved/${userId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (response.ok) {
       const invites = await response.json();
@@ -139,7 +147,7 @@ const Profile = ({
               <h1>Manage Invitations:</h1>
               {boards?.length > 0 && (
                 <Button
-                  color={`${darkMode ? 'white' : '#635FC71A'}`}
+                  color={`${darkMode ? "white" : "#635FC71A"}`}
                   textColor="#635FC7"
                   onClick={() => setInviteForm(true)}
                 >
@@ -188,7 +196,7 @@ const Profile = ({
                 {recievedInvites?.length === 0 && (
                   <p>No invites recieved.....</p>
                 )}
-              </div> 
+              </div>
             </div>
           </div>
           <div className="profile">
@@ -203,9 +211,9 @@ const Profile = ({
             <h3>{user?.username}</h3>
             <p>email:</p>
             <h4>{user?.email}</h4>
-            <Button
-             onClick={() => setShowUpdateProfileForm(true)}
-             >Update Profile</Button>
+            <Button onClick={() => setShowUpdateProfileForm(true)}>
+              Update Profile
+            </Button>
             <Button onClick={handleLogout} color="#EA5555" textColor="white">
               Logout
             </Button>
@@ -270,27 +278,41 @@ const Profile = ({
           </Button>
         </Card>
       )}
-      {sidebarVisible && windowWidth < 600 && (<div
-        style={{
-          position: "absolute",
-          top: '80px',
-          left: 0,
-          width: "100vw",
-          height: "calc(100vh - 90px)",
-          backgroundColor: "rgba(0,0,0,0.5)",
-          zIndex: "999",
-        }}
-      />)}
+      {sidebarVisible && windowWidth < 600 && (
+        <div
+          style={{
+            position: "absolute",
+            top: "80px",
+            left: 0,
+            width: "100vw",
+            height: "calc(100vh - 90px)",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            zIndex: "999",
+          }}
+        />
+      )}
       {showUpdateProfileForm && (
-        <UpdateProfileForm 
-        darkMode={darkMode}
-        setShowUpdateProfileForm={setShowUpdateProfileForm}
-        user={user}
-        getUser={getUser}
-        updateUser={updateUser}
-        deleteUser={deleteUser}
-        showAlert={showAlert}
-        handleLogout={handleLogout}
+        <UpdateProfileForm
+          darkMode={darkMode}
+          setShowUpdateProfileForm={setShowUpdateProfileForm}
+          user={user}
+          getUser={getUser}
+          updateUser={updateUser}
+          showAlert={showAlert}
+          handleLogout={handleLogout}
+          setShowDeleteForm={setShowDeleteForm}
+        />
+      )}
+      {showDeleteForm && (
+        <DeleteConfirm
+          text={"user"}
+          hideForm={() => {
+            setShowDeleteForm(false);
+            setShowUpdateProfileForm(true);
+          }}
+          handleLogout={handleLogout}
+          deleteUser={deleteUser}
+          user={user}
         />
       )}
     </>

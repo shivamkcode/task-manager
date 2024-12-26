@@ -11,6 +11,9 @@ const DeleteConfirm = ({
   showAlert,
   setChosenBoardId,
   boards,
+  handleLogout,
+  deleteUser,
+  user,
 }) => {
   const deleteBoard = async (id, token) => {
     const response = await fetch(
@@ -48,9 +51,8 @@ const DeleteConfirm = ({
 
   const handleDelete = async () => {
     const token = localStorage.getItem("token");
-    const currentIndex = boards.findIndex((board) => board.id === id);
-    console.log(currentIndex);
     if (text === "board") {
+      const currentIndex = boards.findIndex((board) => board.id === id);
       await deleteBoard(id, token);
       getBoards(token);
       if (currentIndex !== -1) {
@@ -62,10 +64,12 @@ const DeleteConfirm = ({
           setChosenBoardId(null);
         }
       }
-      console.log(id)
-    } else {
+    } else if (text === "task") {
       await deleteTask(id, token);
       getBoards(token);
+    } else {
+      await deleteUser(user.id, token);
+      handleLogout();
     }
   };
 
@@ -84,6 +88,12 @@ const DeleteConfirm = ({
         <p>
           Are you sure you want to delete the <b>{name}</b> task and its
           subtasks? This action cannot be reversed.
+        </p>
+      )}
+      {text === "user" && (
+        <p>
+          Are you sure you want to Permanently delete your account and all the
+          data? This action cannot be reversed.
         </p>
       )}
       <Button

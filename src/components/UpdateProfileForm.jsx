@@ -14,6 +14,7 @@ const UpdateProfileForm = ({
   updateUser,
   getUser,
   handleLogout,
+  setShowDeleteForm
 }) => {
   const [username, setUsername] = useState(user.username);
   const [oldPassword, setOldPassword] = useState("");
@@ -63,116 +64,118 @@ const UpdateProfileForm = ({
   };
 
   return (
-    <Card showShadow={true}>
-      <div className="card-header">
-        <h3>Update Profile</h3>
-        <img
-          className="cross"
-          onClick={() => setShowUpdateProfileForm(false)}
-          src={Cross}
-          alt="X"
-        />
-      </div>
-      <form action="submit">
-        <label>
-          Change Username
-          <Input
-            placeholder="John"
-            autoComplete="on"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
+    <>
+      <Card showShadow={true}>
+        <div className="card-header">
+          <h3>Update Profile</h3>
+          <img
+            className="cross"
+            onClick={() => setShowUpdateProfileForm(false)}
+            src={Cross}
+            alt="X"
           />
-        </label>
-        <div>
-          <h3>Change Password</h3>
-          <label>
-            Old Password
-            <div className="passwordInput">
-              <Input
-                type={showOldPassword ? "text" : "password"}
-                placeholder={"Password"}
-                value={oldPassword}
-                capital={false}
-                onChange={(e) => setOldPassword(e.target.value)}
-              />
-              <img
-                className="eye"
-                onClick={() => setShowOldPassword(!showOldPassword)}
-                src={showOldPassword ? EyeIcon : Eye}
-                alt="eye"
-              />
-            </div>
-          </label>
-          <label>
-            New Password
-            <div className="passwordInput">
-              <Input
-                type={showNewPassword ? "text" : "password"}
-                placeholder={"Password"}
-                value={newPassword}
-                capital={false}
-                onChange={handlePasswordChange}
-              />
-              <img
-                className="eye"
-                onClick={() => setShowNewPassword(!showNewPassword)}
-                src={showNewPassword ? EyeIcon : Eye}
-                alt="eye"
-              />
-            </div>
-            {passwordError && (
-              <p style={{ color: "#CD2C2C" }}>{passwordError}</p>
-            )}
-          </label>
-          <label>
-            Confirm New Password
-            <div className="passwordInput">
-              <Input
-                type={showConfirmNewPassword ? "text" : "password"}
-                placeholder={"Password"}
-                value={confirmNewPassword}
-                capital={false}
-                onChange={(e) => setConfirmNewPassword(e.target.value)}
-              />
-              <img
-                className="eye"
-                onClick={() =>
-                  setShowConfirmNewPassword(!showConfirmNewPassword)
-                }
-                src={showConfirmNewPassword ? EyeIcon : Eye}
-                alt="eye"
-              />
-            </div>
-          </label>
         </div>
-        <Button
-          disabled={
-            !username ||
-            (username === user.username && !oldPassword) ||
-            (oldPassword && (!newPassword || !confirmNewPassword)) ||
-            (newPassword && (!oldPassword || !confirmNewPassword)) ||
-            (confirmNewPassword && (!oldPassword || !newPassword))
-          }
-          onClick={() => {
-            handleUpdate();
-            setShowUpdateProfileForm(false);
-          }}
-        >
-          Update Profile
-        </Button>
-        <Button
-          color="#EA5555"
-          textColor="white"
-          //   onClick={() => {
-          //     handleSubmit();
-          //     showForm();
-          //   }}
-        >
-          Delete User
-        </Button>
-      </form>
-    </Card>
+        <form action="submit">
+          <label>
+            Change Username
+            <Input
+              placeholder="John"
+              autoComplete="on"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </label>
+          <div>
+            <h3>Change Password</h3>
+            <label>
+              Old Password
+              <div className="passwordInput">
+                <Input
+                  type={showOldPassword ? "text" : "password"}
+                  placeholder={"Password"}
+                  value={oldPassword}
+                  capital={false}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                />
+                <img
+                  className="eye"
+                  onClick={() => setShowOldPassword(!showOldPassword)}
+                  src={showOldPassword ? EyeIcon : Eye}
+                  alt="eye"
+                />
+              </div>
+            </label>
+            <label>
+              New Password
+              <div className="passwordInput">
+                <Input
+                  type={showNewPassword ? "text" : "password"}
+                  placeholder={"Password"}
+                  value={newPassword}
+                  capital={false}
+                  onChange={handlePasswordChange}
+                />
+                <img
+                  className="eye"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                  src={showNewPassword ? EyeIcon : Eye}
+                  alt="eye"
+                />
+              </div>
+              {passwordError && (
+                <p style={{ color: "#CD2C2C" }}>{passwordError}</p>
+              )}
+            </label>
+            <label>
+              Confirm New Password
+              <div className="passwordInput">
+                <Input
+                  type={showConfirmNewPassword ? "text" : "password"}
+                  placeholder={"Password"}
+                  value={confirmNewPassword}
+                  capital={false}
+                  onChange={(e) => setConfirmNewPassword(e.target.value)}
+                />
+                <img
+                  className="eye"
+                  onClick={() =>
+                    setShowConfirmNewPassword(!showConfirmNewPassword)
+                  }
+                  src={showConfirmNewPassword ? EyeIcon : Eye}
+                  alt="eye"
+                />
+              </div>
+            </label>
+          </div>
+          <Button
+            disabled={
+              !username ||
+              (username === user.username && !oldPassword) ||
+              (oldPassword && (!newPassword || !confirmNewPassword)) ||
+              (newPassword && (!oldPassword || !confirmNewPassword)) ||
+              (confirmNewPassword && (!oldPassword || !newPassword))
+            }
+            onClick={() => {
+              handleUpdate();
+              setShowUpdateProfileForm(false);
+            }}
+          >
+            Update Profile
+          </Button>
+          <Button
+            color="#EA5555"
+            textColor="white"
+            onClick={() => {
+              setShowDeleteForm(true);
+              setShowUpdateProfileForm(false)
+            }}
+          >
+            Delete User
+          </Button>
+        </form>
+      </Card>
+    </>
   );
 };
 
