@@ -431,7 +431,7 @@ const Board = ({
         <div
           style={{
             position: "absolute",
-            top: "80px",
+            top: "90px",
             left: 0,
             width: "100vw",
             height: "calc(100vh - 90px)",

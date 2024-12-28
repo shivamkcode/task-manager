@@ -5,8 +5,8 @@ import Button from "./Button";
 import { useNavigate } from "react-router-dom";
 import PlusSign from "../assets/icon-add-task-mobile.svg";
 import Logo from "../assets/logo-mobile.svg";
-import Down from '../assets/icon-chevron-down.svg'
-import Up from '../assets/icon-chevron-up.svg'
+import Down from "../assets/icon-chevron-down.svg";
+import Up from "../assets/icon-chevron-up.svg";
 
 const NavBar = ({
   boardName,
@@ -24,20 +24,35 @@ const NavBar = ({
   return (
     <nav className={`nav ${sidebarVisible ? "" : "noSideBar-nav"}`}>
       {windowWidth < 600 && (
-        <div style={{cursor: "pointer"}} className="card-header" onClick={() => navigate("/")}>
-          <img style={{marginRight: '20px'}} src={Logo} alt="logo" />
+        <div
+          style={{ cursor: "pointer" }}
+          className="card-header"
+          onClick={() => navigate("/")}
+        >
+          <img style={{ marginRight: "20px" }} src={Logo} alt="logo" />
           {!boardName && <h1>TaskTracker</h1>}
         </div>
       )}
       {windowWidth > 600 && !sidebarVisible && (
-        <div style={{cursor: "pointer"}} className="card-header" onClick={() => navigate("/")}>
+        <div
+          style={{ cursor: "pointer" }}
+          className="card-header"
+          onClick={() => navigate("/")}
+        >
           <div className="logo" />
           <h1>TaskTracker</h1>
         </div>
       )}
-      <h2>{windowWidth < 400 ? boardName?.split(' ')[0] : boardName}</h2>
+      <h2>{windowWidth < 400 ? boardName?.split(" ")[0] : boardName}</h2>
       {windowWidth < 600 && (
-        <img style={{marginLeft:'20px', width:'15px', marginRight:'auto'}} onClick={() => setSidebarVisible(!sidebarVisible)} src={sidebarVisible ? Up : Down} alt="^" />
+        <img
+          style={{ margin: "10px ", width: "15px", marginRight: "auto" }}
+          onClick={() => {
+            setSidebarVisible(!sidebarVisible)
+          }}
+          src={sidebarVisible ? Up : Down}
+          alt="^"
+        />
       )}
       {boardName && (
         <>
@@ -63,7 +78,11 @@ const NavBar = ({
           />
         </>
       )}
-      {!boards && <Button onClick={() => navigate("/")}>{windowWidth < 600 ? '<<' : 'Dashboard'}</Button>}
+      {!boards && (
+        <Button onClick={() => navigate("/")}>
+          {windowWidth < 600 ? "<<" : "Dashboard"}
+        </Button>
+      )}
       <div
         onClick={() => navigate("/profile")}
         className="profile-icon"

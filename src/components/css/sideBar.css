@@ -169,7 +169,7 @@ input:checked + .slider:before {
     position: absolute;
     z-index: 1000;
     width: 70%;
-    top: 15%;
+    top: 80px;
     left: 50%;
     transform: translateX(-50%);
     box-shadow: 0px 5px 5px 0px rgba(54, 78, 126, 0.2);
